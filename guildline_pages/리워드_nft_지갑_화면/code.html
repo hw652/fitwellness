@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>리워드 NFT 지갑 화면</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0" rel="stylesheet"/>
+<style type="text/tailwindcss">
+    :root {
+      --mint-start: #6ef2a2;
+      --green-end: #32d6a5;
+    }
+  </style>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#30e87a",
+            "background-light": "#f6f8f7",
+            "background-dark": "#112117",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 24px;}
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-gradient-to-b dark:from-[#112117] dark:to-[#1a382a] group/design-root overflow-x-hidden">
+<main class="flex-1 overflow-y-auto">
+<div class="sticky top-0 z-10 flex items-center bg-transparent p-4 pb-2 backdrop-blur-sm justify-between">
+<div class="flex size-12 shrink-0 items-center text-slate-800 dark:text-white">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h2 class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">나의 리워드 NFT</h2>
+<div class="size-12"></div>
+</div>
+<div class="flex p-4 @container">
+<div class="flex w-full flex-col gap-4">
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 min-w-16 rounded-full bg-cover bg-center bg-no-repeat" data-alt="User profile picture, an abstract colorful gradient" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBT96tF0K47rMOjDgzYnnmSk3nVK-xEHdNdSJP1zNSlwEtjPdZHyW8uMvqqQsShqLfBUoxVsWEGjYt4iSR_RlgDSIoVqqaNT8cx73lbh6_OnpRzKQlvErAXxPWO5qoxOM2rtt2kaXUcZjx_jmaneWSVmzFKN6uffVvK1ZBnquMnKo2I50NeXkiIO0xqeQpqRQMwd_NMOgoAFB57b__jhxOXAkIOaT9gKR18BgPLuG_2aTpvy522mrkKZv9-sLAN8VOSCHrQSHf6KqPD");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-[22px] font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">홍길동님</p>
+<p class="text-base font-normal leading-normal text-slate-600 dark:text-gray-400">총 <span class="font-bold text-[var(--mint-start)]">15개</span>의 NFT를 획득했어요!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-2 p-4 pt-2 overflow-x-auto">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-gradient-to-r from-[var(--mint-start)] to-[var(--green-end)] pl-4 pr-4">
+<p class="text-sm font-medium leading-normal text-black">최신순</p>
+<span class="material-symbols-outlined text-black" style="font-size: 20px;">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-200 pl-4 pr-4 dark:bg-white/10">
+<p class="text-sm font-medium leading-normal text-slate-700 dark:text-gray-300">획득 유형</p>
+<span class="material-symbols-outlined text-slate-700 dark:text-gray-300" style="font-size: 20px;">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-200 pl-4 pr-4 dark:bg-white/10">
+<p class="text-sm font-medium leading-normal text-slate-700 dark:text-gray-300">등급</p>
+<span class="material-symbols-outlined text-slate-700 dark:text-gray-300" style="font-size: 20px;">expand_more</span>
+</button>
+</div>
+<div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-4 p-4">
+<div class="flex flex-col gap-3 pb-3">
+<div class="w-full rounded-xl bg-gradient-to-br from-white/20 to-transparent p-2">
+<div class="w-full rounded-lg bg-cover bg-center bg-no-repeat aspect-square" data-alt="NFT art for a jogging challenge, depicting a running shoe with wings" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB3RRMLAm4VQjZ490ttQWQcJ76Eg-X8nV3NS6W9z0eIhHZdIyLJil1jDFeKw6R0Trbt0IAopdvQCbkecFFKlU1Qe7eWm5oDVEd2PvCqVisEmusWnkrW-IFVbBg5vURwHCB9W2QlNprkoYrsNmN64vqKeT9faSHNTsRknGm9iCkR6tnyPZxeZVKcjgkgUHsd_Oe6FGBkSSxRynZJraMaXrPrnl37v7ldZJRcDKJZaxDBr_Q2PQpsHTsMkK_STNTKm8OD4Nc8I_34uxBu");'></div>
+</div>
+<div>
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">새벽 조깅 챌린지</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-gray-400">2023.10.26</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3">
+<div class="w-full rounded-xl bg-gradient-to-br from-white/20 to-transparent p-2">
+<div class="w-full rounded-lg bg-cover bg-center bg-no-repeat aspect-square" data-alt="NFT art for a weekly workout goal, showing abstract glowing lines forming a muscle shape" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDYya6yfScMPooSqpoOd7jZ-uGd_HL7njR1JH14kwFwB223JFCy2Z_FhZQGAyQDsNiPQ-MozAW6aOgk8kUDinpWDGvU3nUPsS9ncL3_v91Bbm1Se-zFmxZOxPjzBOxqYzQIsUfZm2dDrSYpW7CdmOTD18ZnSkhxrJ41wsyelbhX1oY0L6amY7cpoElIFFC9x7ez0BbqQCPxfk6BgAptkxcyH9nzPih_qy68M-AF5dODJOq1lTeqCLPnpObFerGH8KBMSYXF8Kyb8uo_");'></div>
+</div>
+<div>
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">주 3회 운동 성공</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-gray-400">2023.10.22</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3">
+<div class="w-full rounded-xl bg-gradient-to-br from-white/20 to-transparent p-2">
+<div class="w-full rounded-lg bg-cover bg-center bg-no-repeat aspect-square" data-alt="NFT art for a 10,000 steps goal, a vibrant path leading to a sunrise" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAHMWU6fJ3_mIBgW0LI-94gEaxv-WuPt1USxLCdI77nQYmL2P2abLYlsaj_BZzz5uIijWRUEKTTPwxbVTz0NIyefKmIWC6ZuHOWkJZv1Bu1wXCFYhoPL1vxPIvoBKD0beankhWQgWHyIzAKCiKMvSNxSBxsxawYRNR1HEeGII7tTu_y3IyTbJcTndVV8IK3Sx8XHIbAmeMm9XwRrRJ6NxtwaWz7h7K_jT9uaYKLow_9XpYBppojH51f3DQD_XuB-8L6ltWzVo_vzmYM");'></div>
+</div>
+<div>
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">10,000 걸음 달성</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-gray-400">2023.10.19</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3">
+<div class="w-full rounded-xl bg-gradient-to-br from-white/20 to-transparent p-2">
+<div class="w-full rounded-lg bg-cover bg-center bg-no-repeat aspect-square" data-alt="NFT art for a monthly goal, a shining trophy on a pedestal" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCsJPyoAN0G5wTROYItM7JOpHljoN4USzJn6zDDmGQ8AWmuSJtAJBvfQst-gumS3eSAg5LPTc0LNN6mye42Q-OfN7zTXoql6dLb4UglmNtEUmQUNgJ4mZDqNVe5L8LH2jqqU-UC1zdokVD2urAM9FUQv3SyvDtaoPutQgpcKcHBzlO1Db3-0quD5I0GHWt4zTXtGA-oyYNPMOpeVkBDZu37rTWhRvHcfkyuJkukmIuiOorLniyRbp79NEo6hdBkEoyZfKSh-nRqLqUG");'></div>
+</div>
+<div>
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">월간 목표 클리어</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-gray-400">2023.09.30</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3">
+<div class="w-full rounded-xl bg-gradient-to-br from-white/20 to-transparent p-2">
+<div class="w-full rounded-lg bg-cover bg-center bg-no-repeat aspect-square" data-alt="NFT art for a first achievement, a glowing number 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDlfqRNw3YHa6v5PlJ_4ctRZ-w96dUfCtuybYn4OCt8g35jYBv2IXLrfIUSrrt4S_xIXWmWPk0L94AXIH3nKm0TQ80S4OrHD_lASlUC1PoIEQN5wRvl_JhbuieZpr_1SZGfYL_t3d5FzfNAHYTrsTGsc7eAJblhm9JusEfFFv2Fg7dp5qzBD5OO5XeYmgPYx6gbxjum8h4CexPmAe3a8hS-DgxdyXV_wMp8fJQMpOccSih03JJej7fqAjINaxv6-Gth779FtMDbPXPC");'></div>
+</div>
+<div>
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">첫 목표 달성!</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-gray-400">2023.09.15</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pb-3">
+<div class="w-full rounded-xl bg-gradient-to-br from-white/20 to-transparent p-2">
+<div class="w-full rounded-lg bg-cover bg-center bg-no-repeat aspect-square" data-alt="NFT art for working out with a friend, two intertwined glowing figures" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD7TL-POm5blhJ831nZaJDuJBYqct1t5CUKo9c0mVL0ZpAGj8YDTRicAonOAcXhNg80eIeNbkF7HfzqADgxkLrQnM-8IYMHEE961RcZzHnI4Krs0RdSTAusjjC7rKIA7hSP6Ijg3EmXgA3CT3UUYDGDzQ8yO4ZlA7z2ZXKLfkGz6XHG9qovY1BaGb1F5Rng-M2RXl4wyCU3hBESQ7qHOpaHBIvnZnMyzN7fq1J_FnpuJsPJk9T1Un5y1ge3zMAVv-EOVcmnjVc7bZ5m");'></div>
+</div>
+<div>
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">친구와 함께 운동</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-gray-400">2023.09.10</p>
+</div>
+</div>
+</div>
+</main>
+<div class="sticky bottom-0 z-10 flex border-t border-slate-200 bg-transparent px-4 pb-3 pt-2 backdrop-blur-sm dark:border-white/10">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined flex h-8 items-center justify-center">home</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">홈</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined flex h-8 items-center justify-center">flag</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">챌린지</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-[var(--mint-start)]" href="#">
+<span class="material-symbols-outlined flex h-8 items-center justify-center" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<p class="text-xs font-bold leading-normal tracking-[0.015em]">지갑</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined flex h-8 items-center justify-center">person</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">마이</p>
+</a>
+</div>
+</div>
+
+</body></html>

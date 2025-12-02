@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>코칭 프로그램 상세 화면</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#30e87a",
+              "background-light": "#f6f8f7",
+              "background-dark": "#112117",
+              "mint": "#69F0AE",
+              "green": "#00E676",
+              "light-gray": "#F5F5F5",
+              "dark-gray": "#424242",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative w-full max-w-lg mx-auto flex flex-col min-h-screen group/design-root overflow-x-hidden pb-28">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex h-14 items-center justify-between bg-background-light/80 px-4 backdrop-blur-sm dark:bg-background-dark/80">
+<button class="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-dark-gray dark:text-light-gray">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+</button>
+<div class="flex items-center justify-end gap-2">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-dark-gray dark:text-light-gray">
+<span class="material-symbols-outlined text-2xl">share</span>
+</button>
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-dark-gray dark:text-light-gray">
+<span class="material-symbols-outlined text-2xl">favorite_border</span>
+</button>
+</div>
+</div>
+<!-- Header Image -->
+<div class="px-4 pt-2">
+<div class="w-full bg-cover bg-center bg-no-repeat min-h-60 rounded-xl" data-alt="A person doing a full body workout in a bright gym" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCHfrOsU-7-pogRUocmMNOupyc7QBKKB1kVJlUqDGdLifk9uwDa3rLfjhvTsgJ_RUFXtQ7c1E7voXtfjcBhdoRAs5wgnV4TRb4yO7EKzlLOujltMqAyIZMxPaPU3nkbzj2nTbTbvYWY6GOKbrqiWfSp2BAhPG5X11QAaTPHThEVWvEtJqF1DCPCzkDx0m1r1_8gY8FKc7TI89mC4c1783S08jXs8X-UOK03PTpSmuVlvhIW4_4qJFblh9AYr_mkRrAw4fIQcK8P9k-D');"></div>
+</div>
+<div class="p-4">
+<!-- Chips -->
+<div class="flex flex-wrap gap-2">
+<div class="flex h-7 shrink-0 items-center justify-center rounded-md bg-primary/20 px-3">
+<p class="text-xs font-medium text-dark-gray dark:text-light-gray">#오운완</p>
+</div>
+<div class="flex h-7 shrink-0 items-center justify-center rounded-md bg-primary/20 px-3">
+<p class="text-xs font-medium text-dark-gray dark:text-light-gray">#초급자용</p>
+</div>
+<div class="flex h-7 shrink-0 items-center justify-center rounded-md bg-primary/20 px-3">
+<p class="text-xs font-medium text-dark-gray dark:text-light-gray">#15분</p>
+</div>
+</div>
+<!-- Headline Text -->
+<h1 class="pt-4 text-3xl font-bold tracking-tight text-dark-gray dark:text-light-gray">전신 불태우기 챌린지</h1>
+<!-- List Item (Trainer Info) -->
+<div class="flex items-center justify-between gap-4 pt-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center bg-no-repeat" data-alt="Profile picture of trainer Jane Doe" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDf0oGcFRJpeKngDGsfd4ceqcuCT3fA7CTEE5nFhHiOpBVET7Rb6wnsMfBqHCZZJupy4YHHdCokl9n1rhlNhTPDiLgYJ0PVI4-zmwfn1X3xEF0cBFmbRLGCd13rkjk3g422VZygziuFHziPVmlrLauyaye3i9dFZ1Cdst6W4RQeZdSO2rcLbf8ERkquds-vAGkuK1_QVdNnPLu-LSokB33zioOtrAetHmzPUfU8VZ8bgd-GxhtH20Sqa5F6okqr4gnhFtueTUiRJuMg');"></div>
+<p class="flex-1 truncate text-base font-medium text-dark-gray dark:text-light-gray">Jane Doe 트레이너</p>
+</div>
+<div class="flex shrink-0 items-center gap-1">
+<span class="material-symbols-outlined text-lg text-yellow-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<p class="text-sm font-medium text-dark-gray dark:text-light-gray">4.8 (215 리뷰)</p>
+</div>
+</div>
+</div>
+<!-- Tab View -->
+<div class="sticky top-14 z-10 border-b border-gray-200 bg-background-light dark:border-gray-700 dark:bg-background-dark">
+<div class="flex justify-around px-4">
+<button class="border-b-2 border-primary py-3 px-1 text-sm font-bold text-primary">프로그램 소개</button>
+<button class="border-b-2 border-transparent py-3 px-1 text-sm font-medium text-gray-500 dark:text-gray-400">상세 루틴</button>
+<button class="border-b-2 border-transparent py-3 px-1 text-sm font-medium text-gray-500 dark:text-gray-400">준비물</button>
+</div>
+</div>
+<!-- Tab Content -->
+<div class="flex flex-col gap-6 p-4">
+<!-- Program Intro Section -->
+<div class="flex flex-col gap-4 rounded-xl bg-white p-4 dark:bg-black/20">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+<span class="material-symbols-outlined text-dark-gray dark:text-light-gray">flag</span>
+</div>
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400">목표</p>
+<p class="font-medium text-dark-gray dark:text-light-gray">단기간 체지방 감량 및 근력 향상</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+<span class="material-symbols-outlined text-dark-gray dark:text-light-gray">signal_cellular_alt</span>
+</div>
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400">난이도</p>
+<p class="font-medium text-dark-gray dark:text-light-gray">초급자 ~ 중급자</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+<span class="material-symbols-outlined text-dark-gray dark:text-light-gray">timer</span>
+</div>
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400">예상 소요 시간</p>
+<p class="font-medium text-dark-gray dark:text-light-gray">하루 15분, 주 3회</p>
+</div>
+</div>
+</div>
+<!-- Description -->
+<div>
+<h2 class="text-lg font-bold text-dark-gray dark:text-light-gray">어떤 프로그램인가요?</h2>
+<p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                    바쁜 일상 속 짧은 시간 투자로 최대의 효과를! '전신 불태우기 챌린지'는 15분이라는 짧은 시간 안에 전신 근육을 자극하고 심박수를 높여 체지방 연소를 극대화하는 고강도 인터벌 트레이닝(HIIT) 프로그램입니다. 운동 초보자도 쉽게 따라할 수 있는 동작들로 구성되어 있습니다.
+                </p>
+</div>
+<!-- Detailed Routine (Expandable List Example) -->
+<div>
+<h2 class="text-lg font-bold text-dark-gray dark:text-light-gray">상세 루틴 미리보기</h2>
+<div class="mt-2 flex flex-col gap-2">
+<div class="flex items-center justify-between rounded-lg bg-white p-3 dark:bg-black/20">
+<div class="flex items-center gap-3">
+<div class="h-14 w-14 rounded-lg bg-cover bg-center" data-alt="Thumbnail image of a person doing jumping jacks" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA3cYjHCw_Xy1cZqYRJ8uEbP1sX-_7UoCcVd2CZzNpU9GQXnFFkCdfHFV88wijPpmijDNnlE5N-T3VXrjaU6v9YBccLiF3w5drmhMNmyOfYPgZgCOtQdnz81QO7ZBYN_RLy5MRIo8XLO_MeWgs-CmNvVSOMzGKn7lZJqd7o6PdUz7kdurz4sE6jCtzBXkd3kW4oI3Nl4pBl8kEPzcyxV3d6aE8-IacZiAkkP_dA4gai_KLEE8esyN38bQQ1a_z-l-ehHtAQ5jxKNq_b')"></div>
+<div>
+<p class="font-semibold text-dark-gray dark:text-light-gray">1. 점핑 잭</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">1분</p>
+</div>
+</div>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20">
+<span class="material-symbols-outlined text-lg text-dark-gray dark:text-light-gray">play_arrow</span>
+</button>
+</div>
+<div class="flex items-center justify-between rounded-lg bg-white p-3 dark:bg-black/20">
+<div class="flex items-center gap-3">
+<div class="h-14 w-14 rounded-lg bg-cover bg-center" data-alt="Thumbnail image of a person doing squats" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQmX707uentpGAr4C8BjJhj4sz8hwOvMZggSaM9SqXuZPSv-JlZk2RP0b-31Jr_zNlGHUvfly5nKPk_qAnwZ7vIYbM_BvFzOoUKYNc62ZHkYxDW-xkTniBX5YTMWAW1kydxpW85aSdSC3FR5uCn3_EjM_gHBN_c-BrafSA6y4uLBBwDnGEkwwYpg4UpbNxpVrVuCDdj3Z3posPhEl5nfYFkTF3cS8jqv0b7n_NPAdrSZEOazx1yiSpU_OTz_Wt0T5oPfHYJeW0iKlE')"></div>
+<div>
+<p class="font-semibold text-dark-gray dark:text-light-gray">2. 스쿼트</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">15회</p>
+</div>
+</div>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20">
+<span class="material-symbols-outlined text-lg text-dark-gray dark:text-light-gray">play_arrow</span>
+</button>
+</div>
+<div class="flex items-center justify-between rounded-lg bg-white p-3 dark:bg-black/20">
+<div class="flex items-center gap-3">
+<div class="h-14 w-14 rounded-lg bg-cover bg-center" data-alt="Thumbnail image of a person doing push-ups" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDeByvIEjhZ1mNGb1WARCSShZyku1-w9CRB2QVwXlRQy_aCKcH4g_VbwjxDKbmch2E3CxQ2VU-m3UajhcLZaj5oSwTYQ7S3kLverJEOMzvV4CIO6zAfjWNr_VVHHIvUl6UMPAtx9yWk2Turm1kwTPYniY6HiiWZ2Zr1QT5rL7KsRRymOwD8pl4wsZS9yyITSLRjZnM8oxRqlspbpIMkRMp_Uo_ihPc1cKheU05Agsyj27ThdV6B2ioK7Cfijx-Y_PyO9Yw-cTo5dg_B')"></div>
+<div>
+<p class="font-semibold text-dark-gray dark:text-light-gray">3. 푸시업</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">10회</p>
+</div>
+</div>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20">
+<span class="material-symbols-outlined text-lg text-dark-gray dark:text-light-gray">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Trainer Profile Card -->
+<div class="rounded-xl bg-white p-4 dark:bg-black/20">
+<h2 class="mb-3 text-lg font-bold text-dark-gray dark:text-light-gray">트레이너 소개</h2>
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 shrink-0 rounded-full bg-cover bg-center" data-alt="Profile picture of trainer Jane Doe" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAtEggy1Rejp6k5uFy4rkrtec5cbajS7mXndbs3g5-GEp4VFo3Dk-2VIF3yMAcYCh9rJyvOKHwSmyxacC9dgYy_Dgk-IFo2rM-xAauWLXU9sDwrVX5WFozQho6xK7ibv8E7cdwMNZBeNFgiD3hJpY-xdBqp-uCUqy7o002KO-0dhVKskGy2zbouOljjICD7YNHdAoMLSECrbIcPNCwbO8U9e6dxn3PTWVSLP85ZV-4jYqLT_Gvop-wZv9Ew9Gj-l3LG20NWB7ZHv-Vb');"></div>
+<div class="flex-1">
+<p class="font-bold text-dark-gray dark:text-light-gray">Jane Doe</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">NASM 인증 퍼스널 트레이너</p>
+<a class="mt-1 inline-block text-xs font-semibold text-primary" href="#">다른 프로그램 보기 &gt;</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Fixed Bottom Button (CTA) -->
+<div class="fixed bottom-0 left-0 right-0 z-10 w-full bg-gradient-to-t from-background-light to-transparent p-4 pb-6 dark:from-background-dark">
+<div class="mx-auto max-w-lg">
+<button class="h-14 w-full rounded-xl bg-gradient-to-r from-mint to-green text-lg font-bold text-dark-gray shadow-lg">
+                    코칭 시작하기
+                </button>
+</div>
+</div>
+</div>
+</body></html>

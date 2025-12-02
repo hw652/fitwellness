@@ -1,0 +1,70 @@
+# Miscellaneous
+*.class
+*.lock
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code
+# 프로젝트 설정을 커밋하고 싶으면 이 줄은 그대로 두세요.
+# .vscode/
+
+# Flutter / Dart / Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+.packages
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/doc/api/
+
+# Android
+**/android/**/.gradle/
+**/android/**/local.properties
+**/android/**/key.properties
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# iOS
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Generated.xcconfig
+**/ios/.symlinks/
+**/ios/Pods/
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Pods/
+**/macos/build/
+
+# Windows
+**/windows/flutter/ephemeral/
+
+# Web
+web/.dart_tool/
+
+# Symbolication
+app.*.symbols
+
+# Obfuscation
+app.*.map.json

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>홈 대시보드 화면</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+    .gradient-bg {
+        background: linear-gradient(180deg, rgba(246, 248, 247, 1) 0%, rgba(136, 212, 152, 0.1) 100%);
+    }
+    .dark .gradient-bg {
+        background: linear-gradient(180deg, rgba(16, 34, 28, 1) 0%, rgba(19, 236, 164, 0.1) 100%);
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#13eca4",
+            "background-light": "#f6f8f7",
+            "background-dark": "#10221c",
+            "accent": "#ff7a5c", /* Coral/Bright Orange */
+            "text-light-primary": "#1f2937",
+            "text-light-secondary": "#6b7280",
+            "text-dark-primary": "#f9fafb",
+            "text-dark-secondary": "#9ca3af",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden gradient-bg">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="flex size-12 shrink-0 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAg7r0CsvTHud-SJqQGco8xQWWdjtklkSED7ZQkhaA9Zvuqt2QPRHjLdQwaF-3JhcL-BgK6Am0L0TPMb9Yga8mREhnixgq1ZMqcVhdCnOdRHY02E8zPN5LRrFkacWCNIDqJIIOlOO4Ftd9YRMKmrl4aIZrGVr6nxz3KwurJqpHAGplN3cm9AWWvzV4P8Dh3j_WUJzxPSPIfzRAaE_SMTiBWV6VDLQ1DFQ9OpTG7oyJlpQBXpsoQP_SoQeqAOkYkR352PaKRjO6PiVsg");'></div>
+</div>
+<h2 class="text-text-light-primary dark:text-dark-primary text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">홈</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 bg-transparent text-text-light-primary dark:text-dark-primary gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+<!-- Headline Text -->
+<div class="px-4 pt-6 pb-3">
+<h1 class="text-text-light-primary dark:text-dark-primary tracking-tight text-[28px] font-bold leading-tight">김민준님,</h1>
+<h1 class="text-text-light-primary dark:text-dark-primary tracking-tight text-[28px] font-bold leading-tight">오늘도 활기찬 하루 보내세요!</h1>
+</div>
+<!-- Section Header: Coaching -->
+<h2 class="text-text-light-primary dark:text-dark-primary text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">민준님을 위한 맞춤 코칭</h2>
+<!-- Carousel -->
+<div class="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+<div class="flex items-stretch p-4 pt-0 gap-3">
+<div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-white/70 dark:bg-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-none min-w-[240px]">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-t-xl flex flex-col" data-alt="A person doing yoga in a bright room" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD5xVPM0r6fyde0SarrIdPa5D49EMkPIxLzG1xF9mKFftLW_VmLYqaIKLGnx8TOfpur44MB_Txig2pXgJ-EnKXSuNe7ego9YKfKVL-w3zPEB7W8FRNpaMXrMWWY4QFnoku13pWR58Rz7JEEHHYM2BwyfxHB0kI0-j8hoyo992Lhc6eqdW8_30SffMUShfEftd8hEQ9x7gOYN2Bcu_0PAOCha2-J-h4IBHt_6Swbxh4x1ykQWw-2bqyg7zdbME_hh5IugLGL8GIyk51x");'></div>
+<div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+<div>
+<p class="text-text-light-primary dark:text-dark-primary text-base font-bold leading-normal">유연성 향상 요가</p>
+<p class="text-primary text-sm font-medium leading-normal">#유연성 #초급</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/20 dark:bg-primary/30 text-primary text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">시작하기</span>
+</button>
+</div>
+</div>
+<div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-white/70 dark:bg-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-none min-w-[240px]">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-t-xl flex flex-col" data-alt="A person meditating peacefully outdoors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDWJA-UcGiImtWP4uRvYY_awgOy95ENWUIZ1alccqHtYLpAoqn-8Un7NG_rMKBzalizYOtIByJlPkRsEvasMmQ7JG-D5bgs5w0h6y22gio1bml6uGOZUM0A1lbz3KaA67FY4uiYMjnUExmfl5-Pnk1Qc3xqwMTq8NZCiKgoWMKjJqFEDt0OpbMKYXyRAK7rkU2Vg3RfH2uYqBldFecChOGSWw0AyyWKqeToI1IhHuvWqklQDLxafjeobDU3oMqV-WNKGeSs2SDVtujk");'></div>
+<div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+<div>
+<p class="text-text-light-primary dark:text-dark-primary text-base font-bold leading-normal">스트레스 완화를 위한 10분 명상</p>
+<p class="text-primary text-sm font-medium leading-normal">#멘탈케어 #초급</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/20 dark:bg-primary/30 text-primary text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">시작하기</span>
+</button>
+</div>
+</div>
+<div class="flex h-full flex-1 flex-col gap-4 rounded-xl bg-white/70 dark:bg-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-none min-w-[240px]">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-t-xl flex flex-col" data-alt="A person doing high-intensity interval training" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSRzkZpuU42ssVnjJPyGXAy01Ph9NTlue1fc2NcL7AsmlOl9ADRNcCLKRWv4w9wjjfqBx3Y2GlLG5SUu5bJ5W7LYL9jA6DzXKGgqbMZ2VZFSu-VKuAEdys9AKQu4u53HCg0tT9F-hVbG-zlveAUF_V-ZN4xF_Oi2-vU753vn108RJEoFZCOIiN381NgaWqf2vkJ7LJd9esoaLODdFLFrm0wnghtN6vLff0IIQpnvu03k-nUlkzsJ_q0Ckz4IUh-UBzGGoD5R6coP6-");'></div>
+<div class="flex flex-col flex-1 justify-between p-4 pt-0 gap-4">
+<div>
+<p class="text-text-light-primary dark:text-dark-primary text-base font-bold leading-normal">고강도 인터벌 트레이닝</p>
+<p class="text-primary text-sm font-medium leading-normal">#체력증진 #중급</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/20 dark:bg-primary/30 text-primary text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">시작하기</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Section Header: Goal Progress -->
+<h2 class="text-text-light-primary dark:text-dark-primary text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">이번 주 목표 달성률</h2>
+<!-- Goal Progress Card -->
+<div class="px-4">
+<div class="flex items-center gap-6 rounded-xl bg-white/70 dark:bg-white/10 p-6 shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-none">
+<div class="relative size-24">
+<svg class="size-full" height="36" viewbox="0 0 36 36" width="36" xmlns="http://www.w3.org/2000/svg">
+<circle class="stroke-current text-gray-200 dark:text-gray-700" cx="18" cy="18" fill="none" r="16" stroke-width="3"></circle>
+<circle class="stroke-current text-accent" cx="18" cy="18" fill="none" r="16" stroke-dasharray="100" stroke-dashoffset="34" stroke-linecap="round" stroke-width="3" transform="rotate(-90 18 18)"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-xl font-bold text-accent">66%</span>
+</div>
+</div>
+<div class="flex flex-col">
+<p class="text-lg font-bold text-text-light-primary dark:text-dark-primary">주 3회 운동하기</p>
+<p class="text-base text-text-light-secondary dark:text-dark-secondary">이번 주 2회 완료</p>
+</div>
+</div>
+</div>
+<!-- Section Header: NFT Rewards -->
+<div class="flex justify-between items-center px-4 pt-8 pb-3">
+<h2 class="text-text-light-primary dark:text-dark-primary text-[22px] font-bold leading-tight tracking-[-0.015em]">나의 리워드 NFT</h2>
+<button class="text-sm font-medium text-primary">전체보기</button>
+</div>
+<!-- NFT Gallery -->
+<div class="grid grid-cols-3 gap-3 px-4 pb-24">
+<div class="relative aspect-square flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary/50 to-primary/20 dark:from-primary/30 dark:to-primary/10 p-2 shadow-sm">
+<div class="absolute top-1 right-1 bg-accent text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">New</div>
+<img alt="NFT for completing a challenge" class="w-3/4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzKJg5HpuKCyPimq5SSLgsSt9MGOiBObgnMZo1HBLEtrmyU3Ko6ia7iCXPb6Flf_d6dIHqsfYFH_OtvaTVqaCrFoejzQ29dezMKch74KZVXZWIeyzOgr8mmJmvgpzSMrqm3paWd2t11YSKilN7a6-K-7qDpfqKUZ025RUDM5XPbVnO84EPE5Kf7noDPsuqV6mM91EDiL_avr9aut3p1VbZFSkUItyixiS-zSUNRhs9hPWcTv6_DDTNAyhTpL6n67DiQoHZQi16ucvl"/>
+<p class="text-xs text-center font-semibold text-text-light-primary dark:text-dark-primary mt-1">꾸준함 챌린지</p>
+</div>
+<div class="relative aspect-square flex flex-col items-center justify-center rounded-xl bg-gray-200/50 dark:bg-gray-800/50 p-2">
+<img alt="NFT for first meditation" class="w-3/4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApcMhR8R2uyksbRFeoMLRTk77UsuEApVhp90R6zhiWFwGUHT53mH8XtOKbR72H9NBBZLWfMhWnETNSP0tBOtX_vHBZk8LyIBX19EBDcT8dgv_mNmcfj76TfRKh8T96wYapNmt04mWZ--fzbRPMZtarVTsrvk_BBi0dZ04dHEjG6CYjEPeEM-Zn6ZqmxZ2ho7vxeFVkKjNvJYESNM1c44uJcHlaVpSDvrlG-T0e3WKChU1X65OAlDw6-EAMI9YEyI60hdIQv9NqLZmk"/>
+<p class="text-xs text-center font-semibold text-text-light-primary dark:text-dark-primary mt-1">첫 명상 성공</p>
+</div>
+<div class="relative aspect-square flex flex-col items-center justify-center rounded-xl bg-gray-200/50 dark:bg-gray-800/50 p-2">
+<img alt="NFT for achieving a goal" class="w-3/4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeJVtxZkqc2-cJ9tUy1_xftNT8gj_EdJ6JdtVLVOBGcEwtAkCNkh9eYZ38vbOZiSKZRgJD8Ce6F9fLWnG6WWzpNHH6inG3JpJnIRJen4v8m22kuF4GwxKO2CpDwIM9Xg8w59iFqH6BPmWd3igxCMXOWl3DbCRVG5PJWkIN4otSBDMFsTV1tHVr2pAL9BtZ69-jEq4yqNH1dUFiXfzXu93-kessexpMY64qWVzpBr3dTO30nZdxaD4LAdShQRertIvHHSVpJDFVFeqP"/>
+<p class="text-xs text-center font-semibold text-text-light-primary dark:text-dark-primary mt-1">목표 달성</p>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-gray-200/80 dark:border-gray-700/80">
+<div class="flex h-full items-center justify-around">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">home</span>
+<span class="text-xs font-bold">홈</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-text-light-secondary dark:text-dark-secondary" href="#">
+<span class="material-symbols-outlined">directions_run</span>
+<span class="text-xs font-medium">운동</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-text-light-secondary dark:text-dark-secondary" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-xs font-medium">커뮤니티</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-text-light-secondary dark:text-dark-secondary" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">마이</span>
+</a>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>마이 페이지 및 설정 화면</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-start": "#6EE7B7",
+                        "primary-end": "#3B82F6",
+                        "background-light": "#F0FDF4",
+                        "background-dark": "#0B1A14",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-zinc-900 dark:text-white">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="flex h-14 items-center justify-between px-4">
+<div class="flex size-10 items-center justify-center">
+<span class="material-symbols-outlined text-zinc-900 dark:text-white text-2xl">arrow_back_ios_new</span>
+</div>
+<h1 class="text-lg font-bold">마이 페이지</h1>
+<div class="flex size-10 items-center justify-center"></div>
+</header>
+<main class="flex-1 overflow-y-auto px-4 pb-10">
+<section class="mt-4 flex items-center gap-4 rounded-xl bg-gradient-to-br from-primary-start/80 to-primary-end/80 p-5 shadow-lg dark:from-primary-start/30 dark:to-primary-end/30">
+<div class="h-16 w-16 shrink-0 rounded-full bg-cover bg-center ring-2 ring-white/50" data-alt="A smiling woman's profile picture." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDTP5hLKeEXRpP96lyuUOW6wgiMObwnLsc7lMoKNwFapSXLOaeARfVyh5Ncts5VXv6KkEfdNhqj3usXrWQI8g2u0X8uac9yaz_9KQHjDG2tSCZZ6WVX7kd3aXyrbdelbRoXMYZHMIHhQO9di11ZtCde4y5XOzE2sdWETvwFNP7Cn89WAuU-JX4H_ejq5s_omnvdfF3QS3FvC_axnsPFTgmUCSlk0TRpft2fUnlzxqc6XXe29mqqiRCi41mYXK4cd3GsCp1OsfCMRPDw");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-lg font-bold text-white">김웰니스</p>
+<p class="text-sm text-white/80">wellness.kim@example.com</p>
+</div>
+<button class="shrink-0 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/30">프로필 수정</button>
+</section>
+<div class="mt-8 space-y-8">
+<section>
+<h2 class="px-2 pb-2 text-sm font-semibold text-zinc-500 dark:text-zinc-400">계정 관리</h2>
+<div class="flex flex-col gap-2">
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-start to-primary-end text-white"><span class="material-symbols-outlined">person</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">개인 정보 수정</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</a>
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-start to-primary-end text-white"><span class="material-symbols-outlined">history</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">내 활동 기록</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</a>
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"><span class="material-symbols-outlined">logout</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">로그아웃</p>
+</div>
+</a>
+</div>
+</section>
+<section>
+<h2 class="px-2 pb-2 text-sm font-semibold text-zinc-500 dark:text-zinc-400">앱 설정</h2>
+<div class="flex flex-col gap-2">
+<div class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm dark:bg-zinc-900/50">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-start to-primary-end text-white"><span class="material-symbols-outlined">notifications</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">알림 설정</p>
+</div>
+<div class="relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full">
+<input checked="" class="peer sr-only" id="notification-toggle" type="checkbox"/>
+<div class="h-full w-full rounded-full bg-zinc-200 transition-colors peer-checked:bg-primary-start dark:bg-zinc-700"></div>
+<span class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform peer-checked:translate-x-full"></span>
+</div>
+</div>
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-start to-primary-end text-white"><span class="material-symbols-outlined">language</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">언어 설정</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm text-zinc-500 dark:text-zinc-400">한국어</span>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</div>
+</a>
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-start to-primary-end text-white"><span class="material-symbols-outlined">dark_mode</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">화면 설정</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm text-zinc-500 dark:text-zinc-400">다크 모드</span>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</div>
+</a>
+</div>
+</section>
+<section>
+<h2 class="px-2 pb-2 text-sm font-semibold text-zinc-500 dark:text-zinc-400">고객 지원</h2>
+<div class="flex flex-col gap-2">
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"><span class="material-symbols-outlined">campaign</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">공지사항</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</a>
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"><span class="material-symbols-outlined">quiz</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">자주 묻는 질문</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</a>
+<a class="flex min-h-[56px] items-center justify-between gap-4 rounded-lg bg-white p-3 shadow-sm transition-colors hover:bg-zinc-50 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/60" href="#">
+<div class="flex items-center gap-4">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"><span class="material-symbols-outlined">support_agent</span></div>
+<p class="flex-1 truncate font-medium text-zinc-800 dark:text-zinc-100">1:1 문의하기</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</a>
+</div>
+</section>
+<section class="text-center text-xs text-zinc-400 dark:text-zinc-500">
+<p>버전 정보 1.0.0</p>
+</section>
+</div>
+</main>
+</div>
+</body></html>

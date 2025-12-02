@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>프로필 데이터 블록체인 업로드 화면</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "Fill in the primary color here",
+            "background-light": "#FFFFFF",
+            "background-dark": "#121212",
+          },
+          fontFamily: {
+            display: ["Noto Sans KR", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.75rem",
+          },
+        },
+      },
+    };
+  </script>
+<style type="text/css">
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="mx-auto flex h-screen max-w-sm flex-col bg-background-light dark:bg-background-dark">
+<main class="flex flex-grow flex-col items-center justify-center p-6 text-center">
+<div class="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-green-200 to-mint-200 dark:from-green-800 dark:to-teal-800">
+<span class="material-icons text-6xl text-green-600 dark:text-mint-300" style="transform: rotate(-15deg);">cloud_upload</span>
+</div>
+<h2 class="mt-8 text-2xl font-bold text-gray-900 dark:text-white">데이터 업로드 중...</h2>
+<p class="mt-2 text-base text-gray-600 dark:text-gray-400">고객님의 데이터를 안전하게 전송하고 있습니다.</p>
+<div class="mt-12 w-full px-4">
+<div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+<span>업로드 진행률</span>
+<span class="font-medium text-green-600 dark:text-mint-400">75%</span>
+</div>
+<div class="mt-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
+<div class="h-2.5 rounded-full bg-gradient-to-r from-green-400 to-mint-500" style="width: 75%"></div>
+</div>
+</div>
+<p class="mt-16 text-sm text-gray-500 dark:text-gray-400">잠시만 기다려주세요. 앱을 종료하지 마세요.</p>
+</main>
+<footer class="p-4">
+</footer>
+</div>
+</body></html>

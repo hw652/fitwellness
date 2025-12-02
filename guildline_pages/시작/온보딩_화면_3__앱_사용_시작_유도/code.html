@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>핏웰니스 시작하기</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;family=Noto+Sans+KR:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-light": "#30e87a",
+            "primary-dark": "#00c6ab",
+            "background-light": "#ffffff",
+            "background-dark": "#112117",
+          },
+          fontFamily: {
+            "display": ['Inter', '"Noto Sans KR"', 'sans-serif']
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="flex flex-col flex-1">
+<div class="@container">
+<div class="@[480px]:px-4 @[480px]:py-3 p-4">
+<div class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden @[480px]:rounded-xl rounded-xl min-h-80 relative" data-alt="A person jogging in a park with a futuristic data overlay, symbolizing personalized fitness coaching.">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent @[480px]:rounded-xl rounded-xl"></div>
+<img class="absolute inset-0 w-full h-full object-cover @[480px]:rounded-xl rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2jM_l9RXiyYZWFfOArqPjkWKkcx1LYtnN4_yTRHdIbU8DB2q-gjtUXH3mRgoksGwzUl9a2qBLcUmyoSBu-TTeMgEzi1pr3xepOjUH3MzXGjqGKmo0xaq9128gqGtTegscyGDeeYZ7qVku0YgpUxXX90zKHeonNK7Sw1n4_DAiM42r4mTNdjhDPZ7ofvEYDVOsGQXT20F6q3atuFoWmaIePeQem3XFu5KRMWUm6n2pHOYE8iDvkiUoy3jQ7Kpj6EWluLp5etgVFGTB"/>
+</div>
+</div>
+</div>
+<h1 class="text-[#111814] dark:text-white tracking-tight text-[32px] font-bold leading-tight px-4 text-center pb-3 pt-6">나만을 위한 데이터 기반 웰니스 코칭</h1>
+<p class="text-[#638872] dark:text-gray-400 text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">핏웰니스와 함께 건강한 변화를 시작해 보세요.</p>
+<div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+<div class="flex flex-1 gap-3 rounded-lg bg-gradient-to-br from-[#E6FFFA] to-[#F0FFF4] dark:from-gray-800 dark:to-gray-900 border border-[#dce5df] dark:border-gray-700 p-4 flex-col">
+<div class="text-primary-dark">
+<span class="material-symbols-outlined" style="font-size: 24px;">shield_person</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-[#111814] dark:text-white text-base font-bold leading-tight">검증된 트레이너의 SBT 인증</h2>
+<p class="text-[#638872] dark:text-gray-400 text-sm font-normal leading-normal">신뢰할 수 있는 전문가와 함께하세요</p>
+</div>
+</div>
+<div class="flex flex-1 gap-3 rounded-lg bg-gradient-to-br from-[#E6FFFA] to-[#F0FFF4] dark:from-gray-800 dark:to-gray-900 border border-[#dce5df] dark:border-gray-700 p-4 flex-col">
+<div class="text-primary-dark">
+<span class="material-symbols-outlined" style="font-size: 24px;">pie_chart</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-[#111814] dark:text-white text-base font-bold leading-tight">My Data 기반 초개인화 프로그램</h2>
+<p class="text-[#638872] dark:text-gray-400 text-sm font-normal leading-normal">당신의 데이터로 만드는 맞춤 플랜</p>
+</div>
+</div>
+</div>
+<div class="flex-grow"></div>
+</div>
+<div class="flex justify-center sticky bottom-0 bg-background-light dark:bg-background-dark pb-4 pt-2">
+<div class="flex flex-1 gap-3 max-w-[480px] flex-col items-stretch px-4 py-3">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-gradient-to-r from-primary-light to-primary-dark text-white text-base font-bold leading-normal tracking-[0.015em] w-full">
+<span class="truncate">핏웰니스 시작하기</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-transparent dark:bg-transparent text-primary-dark dark:text-primary-light text-base font-bold leading-normal tracking-[0.015em] w-full">
+<span class="truncate">로그인</span>
+</button>
+</div>
+</div>
+</div>
+
+</body></html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>코칭 진행 및 기록 화면</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&amp;family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#30e87a",
+              "background-light": "#f6f8f7",
+              "background-dark": "#112117",
+              "mint": "#69EACB",
+              "green": "#2ED573",
+              "navy": "#2F3542",
+              "grey": "#F0F2F5",
+            },
+            fontFamily: {
+              "display": ["Lexend", "Noto Sans KR", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-navy dark:text-gray-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-navy dark:text-gray-200">arrow_back_ios_new</span>
+</div>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center">스쿼트</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="text-sm font-bold leading-normal text-green dark:text-primary">운동 종료</button>
+</div>
+</header>
+<main class="flex flex-col flex-1 px-4 pt-2 pb-6">
+<!-- Progress Bar -->
+<div class="flex flex-col gap-2 py-4">
+<div class="flex gap-6 justify-between">
+<p class="text-base font-medium leading-normal">오늘의 운동 진행률</p>
+<p class="text-sm font-bold leading-normal text-green dark:text-primary">3 / 5 세트</p>
+</div>
+<div class="rounded-full bg-grey dark:bg-gray-700 h-2.5">
+<div class="h-2.5 rounded-full bg-gradient-to-r from-mint to-green" style="width: 60%;"></div>
+</div>
+</div>
+<!-- Header Image / Video -->
+<div class="@container my-4">
+<div class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-gray-200 dark:bg-gray-800 rounded-xl min-h-60" data-alt="A person performing a squat exercise correctly." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwVzmCHIYTYowahPS4_5FXfVrb94ev-HcBAihSsOy4pBIWmowtdxXiJQIDgcJ3d-aYiWXzaPy4rb4oPPI1yR-Hc6ReyvFOgDxY2ZgFYEdVEI6_rOIxYys-c--8BU3bqwdMNck55g2bMPx2iEnxKzLqYRFGGJytZFkF-ezFC69ffBHewvtalWQF7Dl2Ou5lscuhWQy1k6ZSyNBNzlXG88qZgftwJ3z4SHN0i9kVi9mkUr-x-LwC8RuWnF-JZbEpY1HIZ5r2TCyCUBG4");'>
+<div class="p-4 bg-gradient-to-t from-black/50 to-transparent">
+<span class="bg-black/30 text-white text-xs font-semibold px-2 py-1 rounded-full">운동 가이드 영상</span>
+</div>
+</div>
+</div>
+<!-- Rest Time Timer -->
+<div class="text-center py-4">
+<h2 class="text-navy dark:text-gray-200 tracking-light text-[28px] font-bold leading-tight">휴식 시간</h2>
+<p class="text-[64px] font-bold leading-none tracking-tighter text-green dark:text-primary my-2">00:45</p>
+<p class="text-gray-500 dark:text-gray-400">다음 운동: 덤벨 숄더 프레스</p>
+</div>
+<!-- Set Record Section -->
+<div class="flex flex-col gap-4 mt-4">
+<div class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+<span class="text-lg font-bold">1 세트</span>
+<div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-sm">
+<span>12 Reps</span>
+<span>|</span>
+<span>40 kg</span>
+</div>
+<span class="material-symbols-outlined text-green dark:text-primary">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+<span class="text-lg font-bold">2 세트</span>
+<div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-sm">
+<span>12 Reps</span>
+<span>|</span>
+<span>40 kg</span>
+</div>
+<span class="material-symbols-outlined text-green dark:text-primary">check_circle</span>
+</div>
+<!-- Active Set -->
+<div class="flex flex-col gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-green dark:border-primary">
+<span class="text-lg font-bold text-green dark:text-primary">3 세트</span>
+<div class="flex justify-around items-center gap-2">
+<div class="flex flex-col items-center gap-2">
+<label class="text-sm text-gray-500 dark:text-gray-400">무게 (kg)</label>
+<input class="w-24 text-center text-2xl font-bold bg-grey dark:bg-gray-700 border-none rounded-lg p-3 focus:ring-2 focus:ring-green dark:focus:ring-primary" type="number" value="40"/>
+</div>
+<div class="text-2xl font-light text-gray-300 dark:text-gray-600">×</div>
+<div class="flex flex-col items-center gap-2">
+<label class="text-sm text-gray-500 dark:text-gray-400">횟수 (Reps)</label>
+<input class="w-24 text-center text-2xl font-bold bg-grey dark:bg-gray-700 border-none rounded-lg p-3 focus:ring-2 focus:ring-green dark:focus:ring-primary" type="number" value="12"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Motivational Message -->
+<div class="mt-6 text-center bg-mint/20 dark:bg-primary/20 p-4 rounded-lg">
+<p class="font-semibold text-green dark:text-primary">"거의 다 왔어요! 한 번 더!"</p>
+</div>
+</main>
+<!-- Footer / Control Area -->
+<footer class="sticky bottom-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm p-4 border-t border-gray-200 dark:border-gray-800">
+<div class="flex items-center gap-3 mb-4">
+<button class="flex items-center justify-center h-14 w-14 rounded-xl bg-grey dark:bg-gray-700 text-navy dark:text-gray-200">
+<span class="material-symbols-outlined">pause</span>
+</button>
+<button class="flex-1 text-center py-4 rounded-xl bg-gradient-to-r from-mint to-green text-navy font-bold text-lg">
+                    세트 완료
+                 </button>
+</div>
+<button class="w-full text-center py-3 rounded-xl bg-transparent border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 font-medium">
+                오늘의 컨디션 기록하기
+            </button>
+</footer>
+</div>
+</body></html>

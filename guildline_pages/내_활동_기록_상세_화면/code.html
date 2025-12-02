@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>내 활동 기록 상세 화면</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#30e87a",
+              "background-light": "#f6f8f7",
+              "background-dark": "#112117",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-zinc-900 font-display">
+<div class="relative mx-auto flex h-auto min-h-screen w-full max-w-md flex-col bg-gradient-to-b from-[#86FDE8] to-[#ACFBC9] dark:from-[#1A3A32] dark:to-[#1F3B2C] group/design-root overflow-x-hidden">
+<header class="sticky top-0 z-10 flex items-center justify-between bg-transparent px-4 py-3">
+<button class="flex size-10 items-center justify-center text-zinc-900 dark:text-white">
+<span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold text-zinc-900 dark:text-white">내 활동 기록</h1>
+<div class="size-10 shrink-0"></div>
+</header>
+<nav class="flex gap-2 p-4 pt-2">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-black/80 pl-4 pr-4 text-white dark:bg-white/90 dark:text-black">
+<p class="text-sm font-bold leading-normal">전체</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white/50 pl-4 pr-4 dark:bg-white/10 backdrop-blur-sm">
+<p class="text-sm font-medium leading-normal text-zinc-800 dark:text-zinc-100">코칭</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white/50 pl-4 pr-4 dark:bg-white/10 backdrop-blur-sm">
+<p class="text-sm font-medium leading-normal text-zinc-800 dark:text-zinc-100">목표 달성</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white/50 pl-4 pr-4 dark:bg-white/10 backdrop-blur-sm">
+<p class="text-sm font-medium leading-normal text-zinc-800 dark:text-zinc-100">커뮤니티</p>
+</button>
+</nav>
+<main class="flex flex-1 flex-col gap-3 px-4 pb-4">
+<div class="flex cursor-pointer items-center gap-4 rounded-xl bg-white/50 p-4 shadow-sm transition-colors hover:bg-white/70 dark:bg-black/20 dark:hover:bg-black/30 backdrop-blur-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#63E8DE] to-[#30E87A]">
+<span class="material-symbols-outlined text-2xl text-white">fitness_center</span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-base font-semibold text-zinc-900 dark:text-white">오늘의 하체 집중 코칭 완료</p>
+<p class="text-sm font-normal text-zinc-700 dark:text-zinc-300">운동 시간: 50분</p>
+<p class="text-sm font-normal text-zinc-500 dark:text-zinc-400">2023.10.27</p>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="flex cursor-pointer items-center gap-4 rounded-xl bg-white/50 p-4 shadow-sm transition-colors hover:bg-white/70 dark:bg-black/20 dark:hover:bg-black/30 backdrop-blur-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#63E8DE] to-[#30E87A]">
+<span class="material-symbols-outlined text-2xl text-white">emoji_events</span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-base font-semibold text-zinc-900 dark:text-white">주간 챌린지: 5km 달리기 성공</p>
+<p class="text-sm font-normal text-zinc-700 dark:text-zinc-300">달성률: 100%</p>
+<p class="text-sm font-normal text-zinc-500 dark:text-zinc-400">2023.10.26</p>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="flex cursor-pointer items-center gap-4 rounded-xl bg-white/50 p-4 shadow-sm transition-colors hover:bg-white/70 dark:bg-black/20 dark:hover:bg-black/30 backdrop-blur-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#63E8DE] to-[#30E87A]">
+<span class="material-symbols-outlined text-2xl text-white">groups</span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-base font-semibold text-zinc-900 dark:text-white">오운완 챌린지 게시글 작성</p>
+<p class="text-sm font-normal text-zinc-700 dark:text-zinc-300">좋아요: 25개</p>
+<p class="text-sm font-normal text-zinc-500 dark:text-zinc-400">2023.10.25</p>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="flex cursor-pointer items-center gap-4 rounded-xl bg-white/50 p-4 shadow-sm transition-colors hover:bg-white/70 dark:bg-black/20 dark:hover:bg-black/30 backdrop-blur-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#63E8DE] to-[#30E87A]">
+<span class="material-symbols-outlined text-2xl text-white">fitness_center</span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-base font-semibold text-zinc-900 dark:text-white">저녁 유산소 코칭 완료</p>
+<p class="text-sm font-normal text-zinc-700 dark:text-zinc-300">소모 칼로리: 320kcal</p>
+<p class="text-sm font-normal text-zinc-500 dark:text-zinc-400">2023.10.24</p>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="flex cursor-pointer items-center gap-4 rounded-xl bg-white/50 p-4 shadow-sm transition-colors hover:bg-white/70 dark:bg-black/20 dark:hover:bg-black/30 backdrop-blur-md">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#63E8DE] to-[#30E87A]">
+<span class="material-symbols-outlined text-2xl text-white">emoji_events</span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-base font-semibold text-zinc-900 dark:text-white">월간 목표: 체중 2kg 감량</p>
+<p class="text-sm font-normal text-zinc-700 dark:text-zinc-300">달성률: 85%</p>
+<p class="text-sm font-normal text-zinc-500 dark:text-zinc-400">2023.10.22</p>
+</div>
+<div class="shrink-0">
+<div class="flex size-7 items-center justify-center text-zinc-500 dark:text-zinc-400">
+<span class="material-symbols-outlined text-2xl">chevron_right</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

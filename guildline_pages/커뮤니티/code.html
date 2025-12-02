@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>커뮤니티/피드백 화면</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style type="text/tailwindcss">
+    .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+    :root {
+      --mint: #30e89c;
+      --green: #1fcf7c;
+      --background-light: #f6f8f7;
+      --background-dark: #11211a;
+      --text-light: #111815;
+      --text-dark: #e0e2e0;
+      --text-muted-light: #638878;
+      --text-muted-dark: #8f9d95;
+      --card-light: #ffffff;
+      --card-dark: #1a2c23;
+      --chip-light: #e8ebea;
+      --chip-dark: #2d3f37;
+    }
+  </style>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "var(--mint)",
+            "background-light": "var(--background-light)",
+            "background-dark": "var(--background-dark)",
+            "text-light": "var(--text-light)",
+            "text-dark": "var(--text-dark)",
+            "text-muted-light": "var(--text-muted-light)",
+            "text-muted-dark": "var(--text-muted-dark)",
+            "card-light": "var(--card-light)",
+            "card-dark": "var(--card-dark)",
+            "chip-light": "var(--chip-light)",
+            "chip-dark": "var(--chip-dark)",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden bg-gradient-to-b from-[var(--mint)] to-transparent" style="max-width: 480px; margin: auto;">
+<div class="sticky top-0 z-10 flex items-center bg-transparent p-4 pb-2 justify-between">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-text-light dark:text-text-dark" style="font-size: 28px;">arrow_back_ios_new</span>
+</div>
+<h1 class="text-text-light dark:text-text-dark text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center">커뮤니티</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 text-text-light dark:text-text-dark gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined" style="font-size: 28px;">search</span>
+</button>
+</div>
+</div>
+<div class="sticky top-[72px] z-10 bg-transparent pt-2 pb-3">
+<div class="flex gap-2 p-3 overflow-x-auto whitespace-nowrap" style="scrollbar-width: none; -ms-overflow-style: none;">
+<style>
+                    .no-scrollbar::-webkit-scrollbar { display: none; }
+                </style>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-gradient-to-r from-[var(--mint)] to-[var(--green)] pl-4 pr-4 shadow">
+<p class="text-white text-sm font-bold leading-normal">전체</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-card-light dark:bg-chip-dark pl-4 pr-4">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">운동일지</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-card-light dark:bg-chip-dark pl-4 pr-4">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">식단공유</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-card-light dark:bg-chip-dark pl-4 pr-4">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">질문있어요</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-card-light dark:bg-chip-dark pl-4 pr-4">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">자유글</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-card-light dark:bg-chip-dark pl-4 pr-4">
+<p class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">트레이너 피드백</p>
+</div>
+</div>
+</div>
+<main class="flex flex-col flex-1 pb-24 bg-background-light dark:bg-background-dark rounded-t-3xl shadow-lg">
+<div class="p-4 bg-transparent border-b border-chip-light dark:border-chip-dark">
+<div class="flex flex-col items-stretch justify-start">
+<div class="flex items-center gap-3 mb-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="User profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNAD1uHqmyTGJdLZKsLyLAYBPEzYe9R_yigBzwSfLjl1KV0s1ZUDYL2_Tim0ow06-fHsq1Nau-opYOrAsyd60hnMdFtEY3vbEh12vUIWZYq5fwa5MtE_4uDq5sQ7l35j_Mbg4hbaCF8JszMUG38x6p4vDYEMma7p5uQ_3r7z9hc7TOBt1Xv-nvG04MwlGeTJ_R2odoJ1zo4Dy6o6FBWG7baEjp4aGqgWNVK0Wnc_C1Gauv91OiwQzIr5MamxmfyKEOgNSyQP-mqZOU"/>
+<div class="flex flex-col">
+<p class="text-text-light dark:text-text-dark text-base font-bold leading-normal">운동매니아</p>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-normal leading-normal">5분 전</p>
+</div>
+</div>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-bold leading-normal mb-2">#운동일지</p>
+<p class="text-text-light dark:text-text-dark text-lg font-normal leading-tight tracking-[-0.015em] mb-3">오늘 오운완! 하체 운동 루틴 공유합니다. 다들 득근하세요! 🔥</p>
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl mb-3" data-alt="A person doing squats in a gym" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCnfloTdMgfwA8ZAWFT4bbolWEypWvRdLkbSY3wel1_XFVOmtL6e68wQNvbNsWtXAHp2HyqAa3u4jJvsPgs9IEO-F05DPi7tZIhKvKX0OhO1ZqV_hRuDYi51qLTHDfeCTYhWn9RLuC9eF1BcTvu_zE2LscMlQTTRApLuihX333myLQR2PEraUGn-eqPbgNwzWYYQWxXa4b0jyQLCIRmACcCgQAK6iYS67txoY1qDxufCsiwfQFla_XmgPI0jr3Q84sEJaLFaO9-FDOI");'></div>
+<div class="flex flex-wrap gap-4 py-1">
+<div class="flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 20px;">favorite</span>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">15</p>
+</div>
+<div class="flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 20px;">chat_bubble</span>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">3</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 bg-transparent border-b border-chip-light dark:border-chip-dark">
+<div class="flex flex-col items-stretch justify-start">
+<div class="flex items-center gap-3 mb-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="User profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUi4sQ2TwhkYrxlSEyZAdOeKLjQdgAr1YvgDuc1FkirmvwHgRkVfXEThv7UkQ0xkYg57q-9Lo3NYBMzCb2c-m5rxKRnfIA8k4fUprkLd8jMS38Ld18Z6guTdfJayMKamV8MUWEm2GNWmmFgckjTnVAffBDSFZE-7um7b6GL-sxo9181Vq_33gGziyQUyPfijnmIcgr8Ux6U1Xt1sfpx_9y3q0XDYMzyDGlzA1iWcERnK9QV8zXr8vAwpgwhVu0IAKlCVR_wOIme30W"/>
+<div class="flex flex-col">
+<p class="text-text-light dark:text-text-dark text-base font-bold leading-normal">다이어터</p>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-normal leading-normal">1시간 전</p>
+</div>
+</div>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-bold leading-normal mb-2">#식단공유</p>
+<p class="text-text-light dark:text-text-dark text-lg font-normal leading-tight tracking-[-0.015em] mb-3">점심으로 먹은 닭가슴살 샐러드! 드레싱 추천 받아요. 🥗</p>
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl mb-3" data-alt="A bowl of chicken salad" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDMYwUFKIJ1y7XnYzyR75M438Kfqu3bfsybbeuGV27-csXZSYMWvfEka_BGwbcoWoL9ga1s5yJOUT1h-60iE1Ww6P3RzLCvbbfkjxfLnpOHQ9ZrJgaK-iLTsEvbzyo_RrDS-_lP1WNvxbQy8PK98wk20coDWFy3u-_L9KtqXXqnOPr7Niv_Al2Xu1ZufhHvSuhqcTm7qvlrTFdaHOfSWrfJHNMMYW2Dto5ud0VQw5xJ3UhXwO4RW-Eo2FtDLBvEoSnKh5N2OC4fh5g3");'></div>
+<div class="flex flex-wrap gap-4 py-1">
+<div class="flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 20px;">favorite</span>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">28</p>
+</div>
+<div class="flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 20px;">chat_bubble</span>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">5</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 bg-transparent">
+<div class="flex flex-col items-stretch justify-start">
+<div class="flex items-center gap-3 mb-3">
+<img class="h-10 w-10 rounded-full object-cover" data-alt="User profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4kguom_vAI_3N3p-zVQifWeCkzqcjMIMZuRqckbUY7xMmZaoLHDuANaoszLPxWZM70IGlNR6Eh6FGrDnqsHwlHWaU4fU_vDABOoJ7pYPKSq3hIC1cJuBcPK5st56txV_1ajRwT83PeP1nmnfVbhF_y659-uxUERFAzXhTQPDYWAB8kXMGPTryo-4M8Dd84RxuZnhvvJxUTm2ueyNSYnSiq5gkc5oRxYJPrDfrZHVYgPNAroPbLpyIsxA3Zx40tfTBhnuYapJmYNMY"/>
+<div class="flex flex-col">
+<p class="text-text-light dark:text-text-dark text-base font-bold leading-normal">헬린이</p>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-normal leading-normal">3시간 전</p>
+</div>
+</div>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-bold leading-normal mb-2">#질문있어요</p>
+<p class="text-text-light dark:text-text-dark text-lg font-normal leading-tight tracking-[-0.015em] mb-3">벤치프레스 할 때 어깨 통증이 있는데, 자세 문제일까요? 조언 부탁드립니다!</p>
+<div class="flex flex-wrap gap-4 py-1">
+<div class="flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 20px;">favorite</span>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">9</p>
+</div>
+<div class="flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark" style="font-size: 20px;">chat_bubble</span>
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">7</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<div class="fixed bottom-6 right-6" style="margin-left: auto; margin-right: auto; max-width: calc(480px - 3rem); left: 0; right: 0;">
+<button class="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-[var(--mint)] to-[var(--green)] text-white shadow-lg">
+<span class="material-symbols-outlined" style="font-size: 28px;">edit</span>
+</button>
+</div>
+</div>
+
+</body></html>
