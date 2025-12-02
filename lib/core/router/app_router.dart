@@ -12,6 +12,7 @@ import 'package:team_wellness/presentation/screens/coaching/program_search_scree
 import 'package:team_wellness/presentation/screens/coaching/trainer_detail_screen.dart';
 import 'package:team_wellness/presentation/screens/coaching/trainer_search_screen.dart';
 import 'package:team_wellness/presentation/screens/community/community_screen.dart';
+import 'package:team_wellness/presentation/screens/community/write_post_screen.dart';
 import 'package:team_wellness/presentation/screens/home/home_dashboard_screen.dart';
 import 'package:team_wellness/presentation/screens/home/main_navigation_screen.dart';
 import 'package:team_wellness/presentation/screens/profile/activity_detail_screen.dart';
@@ -138,6 +139,11 @@ class AppRouter {
       ),
 
       // --- Root Level Detail Routes (Hide Bottom Nav) ---
+      GoRoute(
+        path: '/community/write',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const WritePostScreen(),
+      ),
       GoRoute(
         path: '/coaching/trainer/:id',
         parentNavigatorKey: _rootNavigatorKey,

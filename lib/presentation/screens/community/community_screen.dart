@@ -1,9 +1,49 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:team_wellness/core/config/app_theme.dart';
+import 'package:team_wellness/core/data/community_repository.dart';
+import 'package:team_wellness/core/models/community_post.dart';
 
-class CommunityScreen extends StatelessWidget {
+class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
+
+  @override
+  State<CommunityScreen> createState() => _CommunityScreenState();
+}
+
+class _CommunityScreenState extends State<CommunityScreen> {
+  final CommunityRepository _repository = CommunityRepository();
+  late Future<List<CommunityPost>> _postsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPosts();
+  }
+
+  void _loadPosts() {
+    setState(() {
+      _postsFuture = _repository.getPosts();
+    });
+  }
+
+  String _timeAgo(DateTime date) {
+    final Duration diff = DateTime.now().difference(date);
+    if (diff.inDays > 365) {
+      return '${(diff.inDays / 365).floor()}년 전';
+    } else if (diff.inDays > 30) {
+      return '${(diff.inDays / 30).floor()}달 전';
+    } else if (diff.inDays > 0) {
+      return '${diff.inDays}일 전';
+    } else if (diff.inHours > 0) {
+      return '${diff.inHours}시간 전';
+    } else if (diff.inMinutes > 0) {
+      return '${diff.inMinutes}분 전';
+    } else {
+      return '방금 전';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,49 +132,33 @@ class CommunityScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: [
-                      _buildFeedItem(
-                        context,
-                        username: '운동매니아',
-                        timeAgo: '5분 전',
-                        profileImage:
-                            'https://lh3.googleusercontent.com/aida-public/AB6AXuCNAD1uHqmyTGJdLZKsLyLAYBPEzYe9R_yigBzwSfLjl1KV0s1ZUDYL2_Tim0ow06-fHsq1Nau-opYOrAsyd60hnMdFtEY3vbEh12vUIWZYq5fwa5MtE_4uDq5sQ7l35j_Mbg4hbaCF8JszMUG38x6p4vDYEMma7p5uQ_3r7z9hc7TOBt1Xv-nvG04MwlGeTJ_R2odoJ1zo4Dy6o6FBWG7baEjp4aGqgWNVK0Wnc_C1Gauv91OiwQzIr5MamxmfyKEOgNSyQP-mqZOU',
-                        tag: '#운동일지',
-                        content: '오늘 오운완! 하체 운동 루틴 공유합니다. 다들 득근하세요! 🔥',
-                        image:
-                            'https://lh3.googleusercontent.com/aida-public/AB6AXuCnfloTdMgfwA8ZAWFT4bbolWEypWvRdLkbSY3wel1_XFVOmtL6e68wQNvbNsWtXAHp2HyqAa3u4jJvsPgs9IEO-F05DPi7tZIhKvKX0OhO1ZqV_hRuDYi51qLTHDfeCTYhWn9RLuC9eF1BcTvu_zE2LscMlQTTRApLuihX333myLQR2PEraUGn-eqPbgNwzWYYQWxXa4b0jyQLCIRmACcCgQAK6iYS67txoY1qDxufCsiwfQFla_XmgPI0jr3Q84sEJaLFaO9-FDOI',
-                        likes: 15,
-                        comments: 3,
-                      ),
-                      _buildFeedItem(
-                        context,
-                        username: '다이어터',
-                        timeAgo: '1시간 전',
-                        profileImage:
-                            'https://lh3.googleusercontent.com/aida-public/AB6AXuBUi4sQ2TwhkYrxlSEyZAdOeKLjQdgAr1YvgDuc1FkirmvwHgRkVfXEThv7UkQ0xkYg57q-9Lo3NYBMzCb2c-m5rxKRnfIA8k4fUprkLd8jMS38Ld18Z6guTdfJayMKamV8MUWEm2GNWmmFgckjTnVAffBDSFZE-7um7b6GL-sxo9181Vq_33gGziyQUyPfijnmIcgr8Ux6U1Xt1sfpx_9y3q0XDYMzyDGlzA1iWcERnK9QV8zXr8vAwpgwhVu0IAKlCVR_wOIme30W',
-                        tag: '#식단공유',
-                        content: '점심으로 먹은 닭가슴살 샐러드! 드레싱 추천 받아요. 🥗',
-                        image:
-                            'https://lh3.googleusercontent.com/aida-public/AB6AXuDMYwUFKIJ1y7XnYzyR75M438Kfqu3bfsybbeuGV27-csXZSYMWvfEka_BGwbcoWoL9ga1s5yJOUT1h-60iE1Ww6P3RzLCvbbfkjxfLnpOHQ9ZrJgaK-iLTsEvbzyo_RrDS-_lP1WNvxbQy8PK98wk20coDWFy3u-_L9KtqXXqnOPr7Niv_Al2Xu1ZufhHvSuhqcTm7qvlrTFdaHOfSWrfJHNMMYW2Dto5ud0VQw5xJ3UhXwO4RW-Eo2FtDLBvEoSnKh5N2OC4fh5g3',
-                        likes: 28,
-                        comments: 5,
-                      ),
-                      _buildFeedItem(
-                        context,
-                        username: '헬린이',
-                        timeAgo: '3시간 전',
-                        profileImage:
-                            'https://lh3.googleusercontent.com/aida-public/AB6AXuB4kguom_vAI_3N3p-zVQifWeCkzqcjMIMZuRqckbUY7xMmZaoLHDuANaoszLPxWZM70IGlNR6Eh6FGrDnqsHwlHWaU4fU_vDABOoJ7pYPKSq3hIC1cJuBcPK5st56txV_1ajRwT83PeP1nmnfVbhF_y659-uxUERFAzXhTQPDYWAB8kXMGPTryo-4M8Dd84RxuZnhvvJxUTm2ueyNSYnSiq5gkc5oRxYJPrDfrZHVYgPNAroPbLpyIsxA3Zx40tfTBhnuYapJmYNMY',
-                        tag: '#질문있어요',
-                        content: '벤치프레스 할 때 어깨 통증이 있는데, 자세 문제일까요? 조언 부탁드립니다!',
-                        image: null, // Assuming the third item in HTML didn't strictly show an image or I missed it, but based on typical feed. Wait, HTML had no image for 3rd item? Let me check. Ah, no image div in 3rd item in HTML.
-                        likes: 9,
-                        comments: 7,
-                      ),
-                      const SizedBox(height: 80), // Bottom padding for FAB
-                    ],
+                  child: FutureBuilder<List<CommunityPost>>(
+                    future: _postsFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('오류가 발생했습니다: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('게시글이 없습니다.'));
+                      }
+
+                      final posts = snapshot.data!;
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: posts.length + 1, // +1 for bottom padding
+                        itemBuilder: (context, index) {
+                          if (index == posts.length) {
+                            return const SizedBox(height: 80); // Bottom padding for FAB
+                          }
+                          final post = posts[index];
+                          return _buildFeedItem(
+                            context,
+                            post: post,
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ),
@@ -143,7 +167,12 @@ class CommunityScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          final result = await context.push('/community/write');
+          if (result == true) {
+            _loadPosts();
+          }
+        },
         backgroundColor: appColors?.mint ?? const Color(0xFF30e89c),
         foregroundColor: Colors.white,
         child: const Icon(Icons.edit),
@@ -195,14 +224,7 @@ class CommunityScreen extends StatelessWidget {
 
   Widget _buildFeedItem(
     BuildContext context, {
-    required String username,
-    required String timeAgo,
-    required String profileImage,
-    required String tag,
-    required String content,
-    String? image,
-    required int likes,
-    required int comments,
+    required CommunityPost post,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     final appColors = Theme.of(context).extension<AppColorsExtension>();
@@ -224,21 +246,21 @@ class CommunityScreen extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage(profileImage),
+                backgroundImage: NetworkImage(post.userImage),
               ),
               const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    username,
+                    post.username,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
                   Text(
-                    timeAgo,
+                    _timeAgo(post.createdAt),
                     style: TextStyle(
                       color: colorScheme.onSurface.withValues(alpha: 0.5),
                       fontSize: 12,
@@ -252,7 +274,7 @@ class CommunityScreen extends StatelessWidget {
 
           // Tag
           Text(
-            tag,
+            post.tag,
             style: TextStyle(
               color: appColors?.freshGreen ?? Colors.teal,
               fontWeight: FontWeight.bold,
@@ -263,7 +285,7 @@ class CommunityScreen extends StatelessWidget {
 
           // Content
           Text(
-            content,
+            post.content,
             style: const TextStyle(
               fontSize: 16,
               height: 1.5,
@@ -272,14 +294,20 @@ class CommunityScreen extends StatelessWidget {
           const SizedBox(height: 12),
 
           // Image
-          if (image != null)
+          if (post.imageUrl != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                image,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              child: post.isLocalImage
+                  ? Image.file(
+                      File(post.imageUrl!),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      post.imageUrl!,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
             ),
           const SizedBox(height: 12),
 
@@ -291,7 +319,7 @@ class CommunityScreen extends StatelessWidget {
                   color: colorScheme.onSurface.withValues(alpha: 0.5)),
               const SizedBox(width: 4),
               Text(
-                '$likes',
+                '${post.likes}',
                 style: TextStyle(
                   color: colorScheme.onSurface.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w500,
@@ -303,7 +331,7 @@ class CommunityScreen extends StatelessWidget {
                   color: colorScheme.onSurface.withValues(alpha: 0.5)),
               const SizedBox(width: 4),
               Text(
-                '$comments',
+                '${post.comments}',
                 style: TextStyle(
                   color: colorScheme.onSurface.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w500,
