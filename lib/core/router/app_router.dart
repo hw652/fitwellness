@@ -19,6 +19,10 @@ import 'package:team_wellness/presentation/screens/profile/activity_detail_scree
 import 'package:team_wellness/presentation/screens/profile/my_page_screen.dart';
 import 'package:team_wellness/presentation/screens/splash/splash_screen.dart';
 import 'package:team_wellness/presentation/screens/wallet/reward_wallet_screen.dart';
+import 'package:team_wellness/presentation/screens/analysis/sbt_analysis_screen.dart';
+import 'package:team_wellness/presentation/screens/trainer/trainer_education_screen.dart';
+import 'package:team_wellness/presentation/screens/trainer/trainer_certification_screen.dart';
+import 'package:team_wellness/presentation/screens/trainer/trainer_performance_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _sectionHomeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'sectionHome');
@@ -175,6 +179,28 @@ class AppRouter {
           final id = state.pathParameters['id'] ?? '';
           return ActivityDetailScreen(activityId: id);
         },
+      ),
+      // --- SBT Analysis ---
+      GoRoute(
+        path: '/analysis/sbt',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const SbtAnalysisScreen(),
+      ),
+      // --- Trainer Management ---
+      GoRoute(
+        path: '/trainer/education',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const TrainerEducationScreen(),
+      ),
+      GoRoute(
+        path: '/trainer/certification',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const TrainerCertificationScreen(),
+      ),
+      GoRoute(
+        path: '/trainer/performance',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const TrainerPerformanceScreen(),
       ),
     ],
   );
