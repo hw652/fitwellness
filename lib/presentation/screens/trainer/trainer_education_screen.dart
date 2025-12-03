@@ -231,7 +231,7 @@ class _TrainerEducationScreenState extends State<TrainerEducationScreen>
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 60,
                   height: 60,
                   child: Stack(
