@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:team_wellness/core/config/app_theme.dart';
 import 'package:team_wellness/core/data/mock_routine_data.dart';
 import 'package:team_wellness/core/models/exercise_model.dart';
 
@@ -13,23 +14,27 @@ class CoachingProgressScreen extends StatefulWidget {
   State<CoachingProgressScreen> createState() => _CoachingProgressScreenState();
 }
 
-class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
+class _CoachingProgressScreenState extends State<CoachingProgressScreen>
+    with TickerProviderStateMixin {
   late Routine routine;
   int currentExerciseIndex = 0;
-  
+
   // Timer State
   Timer? _timer;
   int _restSecondsRemaining = 0;
   bool isResting = false;
 
-  // Scroll Controller to auto-scroll to active set
+  // Animation Controllers
+  late AnimationController _pulseController;
+  late AnimationController _progressAnimController;
+  late Animation<double> _pulseAnimation;
+
+  // Scroll Controller
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    // In a real app, fetch by widget.programId
-    // IMPORTANT: Reset the static data state when entering the screen
     routine = MockRoutineData.dailyRoutine;
     for (var exercise in routine.exercises) {
       for (var set in exercise.sets) {
@@ -38,28 +43,40 @@ class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
         set.actualWeight = null;
       }
     }
+
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
+    _progressAnimController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     _scrollController.dispose();
+    _pulseController.dispose();
+    _progressAnimController.dispose();
     super.dispose();
   }
 
   Exercise get currentExercise => routine.exercises[currentExerciseIndex];
-  
   List<ExerciseSet> get currentSets => currentExercise.sets;
 
   int get currentSetIndex {
-    // Find the first incomplete set
     int index = currentSets.indexWhere((set) => !set.isCompleted);
-    // If all completed, return last index
     return index == -1 ? currentSets.length - 1 : index;
   }
 
   ExerciseSet get currentSet => currentSets[currentSetIndex];
-
   bool get isLastSetOfExercise => currentSetIndex == currentSets.length - 1;
   bool get isLastExercise => currentExerciseIndex == routine.exercises.length - 1;
 
@@ -73,15 +90,10 @@ class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
 
   int get _completedSetsInRoutine {
     int completedTotal = 0;
-
-    // 이전까지 끝낸 운동은 세트 전체를 완료한 것으로 계산
     for (int i = 0; i < currentExerciseIndex; i++) {
       completedTotal += routine.exercises[i].sets.length;
     }
-
-    // 현재 운동은 완료한 세트만 반영
     completedTotal += completedSetsInCurrentExercise;
-
     return completedTotal;
   }
 
@@ -91,6 +103,7 @@ class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
   }
 
   void _startRestTimer() {
+    HapticFeedback.mediumImpact();
     setState(() {
       isResting = true;
       _restSecondsRemaining = currentExercise.defaultRestSeconds;
@@ -111,18 +124,17 @@ class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
   }
 
   void _skipRest() {
+    HapticFeedback.lightImpact();
     _timer?.cancel();
     setState(() {
       isResting = false;
     });
-    // Auto-scroll to the next set if needed
   }
 
   void _completeSet() {
+    HapticFeedback.heavyImpact();
     setState(() {
-      // Mark current set as complete
       currentSet.isCompleted = true;
-      // Save actual values
       currentSet.actualReps ??= currentSet.targetReps;
       currentSet.actualWeight ??= currentSet.targetWeight;
     });
@@ -131,258 +143,837 @@ class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
       if (isLastExercise) {
         _showWorkoutCompleteDialog();
       } else {
-        // Transition to next exercise immediately
         setState(() {
           currentExerciseIndex++;
         });
-        // Start rest timer for the next exercise
         _startRestTimer();
       }
     } else {
-      // Go to rest
       _startRestTimer();
     }
   }
 
   void _showWorkoutCompleteDialog() {
-    showDialog(
+    HapticFeedback.heavyImpact();
+    showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('🎉 운동 종료!'),
-        content: const Text('모든 운동을 완료했습니다.\n수고하셨습니다!'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
-              context.pop(); // Exit screen
-            },
-            child: const Text('완료'),
-          ),
-        ],
-      ),
+      barrierColor: Colors.black87,
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (context, anim1, anim2) {
+        return _WorkoutCompleteDialog(
+          routineName: routine.name,
+          totalSets: _totalSetsInRoutine,
+          onGetNft: () {
+            Navigator.of(context).pop();
+            this.context.pop();
+            this.context.push('/wallet/minting', extra: {
+              'type': 'challenge',
+              'name': routine.name,
+            });
+          },
+          onSkip: () {
+            Navigator.of(context).pop();
+            this.context.pop();
+          },
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: anim1, curve: Curves.elasticOut),
+          child: child,
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final appColors = Theme.of(context).extension<AppColorsExtension>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => context.pop(),
+      backgroundColor: isDark ? const Color(0xFF050508) : colorScheme.surface,
+      body: Stack(
+        children: [
+          // Background gradient
+          _buildBackground(isDark, colorScheme),
+
+          // Main content
+          SafeArea(
+            child: Column(
+              children: [
+                _buildAppBar(context, colorScheme),
+                _buildProgressHeader(context, colorScheme),
+                Expanded(
+                  child: isResting
+                      ? _buildRestView(context)
+                      : _buildActiveView(context),
+                ),
+              ],
+            ),
+          ),
+
+          // Bottom button
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _buildBottomBar(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBackground(bool isDark, ColorScheme colorScheme) {
+    return Stack(
+      children: [
+        Positioned(
+          top: -100,
+          right: -100,
+          child: Container(
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  colorScheme.primary.withValues(alpha: 0.15),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+          ),
         ),
-        title: Text(
-          currentExercise.name,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        Positioned(
+          bottom: 100,
+          left: -80,
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  const Color(0xFF4E80EE).withValues(alpha: 0.1),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+          ),
         ),
-        centerTitle: true,
-        actions: [
+      ],
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context, ColorScheme colorScheme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => _showExitConfirmDialog(context),
+            icon: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: colorScheme.onSurface.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 18,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  routine.name,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  currentExercise.name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           TextButton(
-            onPressed: () => context.pop(),
+            onPressed: () => _showExitConfirmDialog(context),
             child: Text(
               '종료',
               style: TextStyle(
-                color: colorScheme.primary,
-                fontWeight: FontWeight.bold,
+                color: colorScheme.error,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // 1. Progress Bar & Header Info
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '전체 루틴 진행률',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      '$_completedSetsInRoutine / $_totalSetsInRoutine 세트 완료',
-                      style: TextStyle(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                LinearProgressIndicator(
-                  value: _overallProgress,
-                  backgroundColor: colorScheme.surfaceContainerHighest,
-                  color: appColors?.freshGreen ?? colorScheme.primary,
-                  minHeight: 10,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ],
-            ),
-          ),
-
-          Expanded(
-            child: isResting 
-              ? _buildRestView(context)
-              : _buildActiveView(context),
-          ),
-        ],
-      ),
-      bottomNavigationBar: _buildBottomBar(context),
     );
   }
 
-  Widget _buildActiveView(BuildContext context) {
+  void _showExitConfirmDialog(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SingleChildScrollView(
-      controller: _scrollController,
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('운동 종료'),
+        content: const Text('정말로 운동을 종료하시겠습니까?\n진행 상황이 저장되지 않습니다.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              '계속하기',
+              style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6)),
+            ),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context.pop();
+            },
+            style: FilledButton.styleFrom(
+              backgroundColor: colorScheme.error,
+            ),
+            child: const Text('종료'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressHeader(BuildContext context, ColorScheme colorScheme) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Guide Image
-           Container(
-            height: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: colorScheme.surfaceContainerHighest,
-              image: DecorationImage(
-                image: NetworkImage(currentExercise.imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              margin: const EdgeInsets.all(12),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Text(
-                '가이드',
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Active Set Card
-          _ActiveSetCard(
-            exerciseType: currentExercise.type,
-            setNumber: currentSet.setNumber,
-            targetReps: currentSet.targetReps,
-            targetWeight: currentSet.targetWeight,
-            onRepsChanged: (val) => currentSet.actualReps = val,
-            onWeightChanged: (val) => currentSet.actualWeight = val,
-          ),
-          
-          const SizedBox(height: 24),
-
-          // Previous Sets Summary
-          if (currentSetIndex > 0)
-             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '완료된 세트',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                ...currentSets.take(currentSetIndex).map((set) => 
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: _CompletedSetItem(set: set, type: currentExercise.type),
-                  )
-                ),
-              ],
-             ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRestView(BuildContext context) {
-    final appColors = Theme.of(context).extension<AppColorsExtension>();
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          '휴식 시간',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      decoration: BoxDecoration(
+        color: colorScheme.onSurface.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outline.withValues(alpha: 0.1),
         ),
-        const SizedBox(height: 20),
-        SizedBox(
-          width: 200,
-          height: 200,
-          child: Stack(
-            fit: StackFit.expand,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircularProgressIndicator(
-                value: _restSecondsRemaining / currentExercise.defaultRestSeconds,
-                strokeWidth: 12,
-                backgroundColor: colorScheme.surfaceContainerHighest,
-                color: appColors?.freshGreen ?? colorScheme.primary,
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.fitness_center_rounded,
+                      size: 18,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    '전체 진행률',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ],
               ),
-              Center(
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      colorScheme.primary.withValues(alpha: 0.15),
+                      colorScheme.primary.withValues(alpha: 0.05),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: Text(
-                  '${_restSecondsRemaining}s',
+                  '$_completedSetsInRoutine / $_totalSetsInRoutine 세트',
                   style: TextStyle(
-                    fontSize: 48, 
+                    color: colorScheme.primary,
                     fontWeight: FontWeight.bold,
-                    color: appColors?.freshGreen ?? colorScheme.primary,
+                    fontSize: 13,
                   ),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 14),
+          // Progress bar with animation
+          Stack(
+            children: [
+              Container(
+                height: 8,
+                decoration: BoxDecoration(
+                  color: colorScheme.onSurface.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeOutCubic,
+                height: 8,
+                width: MediaQuery.of(context).size.width * 0.85 * _overallProgress,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      colorScheme.primary,
+                      const Color(0xFF4ECDC4),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                  boxShadow: [
+                    BoxShadow(
+                      color: colorScheme.primary.withValues(alpha: 0.4),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Exercise indicators
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(routine.exercises.length, (index) {
+              final isCompleted = index < currentExerciseIndex;
+              final isCurrent = index == currentExerciseIndex;
+
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                child: Row(
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: isCurrent ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: isCompleted
+                            ? colorScheme.primary
+                            : isCurrent
+                                ? colorScheme.primary
+                                : colorScheme.onSurface.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActiveView(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return SingleChildScrollView(
+      controller: _scrollController,
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 120),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Hero Image Card
+          _buildExerciseImageCard(context, isDark, colorScheme),
+
+          const SizedBox(height: 24),
+
+          // Current Set Card
+          _buildCurrentSetCard(context, colorScheme),
+
+          const SizedBox(height: 20),
+
+          // Set Progress Indicators
+          _buildSetProgressIndicators(context, colorScheme),
+
+          const SizedBox(height: 20),
+
+          // Completed Sets
+          if (currentSetIndex > 0) _buildCompletedSets(context, colorScheme),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExerciseImageCard(
+      BuildContext context, bool isDark, ColorScheme colorScheme) {
+    return Container(
+      height: 240,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.primary.withValues(alpha: 0.2),
+            blurRadius: 30,
+            offset: const Offset(0, 15),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Image
+            Image.network(
+              currentExercise.imageUrl,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Container(
+                  color: colorScheme.surfaceContainerHighest,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: colorScheme.surfaceContainerHighest,
+                  child: Icon(
+                    Icons.fitness_center_rounded,
+                    size: 64,
+                    color: colorScheme.onSurface.withValues(alpha: 0.3),
+                  ),
+                );
+              },
+            ),
+
+            // Gradient overlay
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.7),
+                  ],
+                  stops: const [0.5, 1.0],
+                ),
+              ),
+            ),
+
+            // Exercise info overlay
+            Positioned(
+              left: 20,
+              right: 20,
+              bottom: 20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          currentExercise.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          currentExercise.description,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.8),
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.timer_outlined,
+                          color: Colors.white.withValues(alpha: 0.9),
+                          size: 16,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          '${currentExercise.defaultRestSeconds}s',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.9),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Exercise number badge
+            Positioned(
+              top: 16,
+              left: 16,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '${currentExerciseIndex + 1} / ${routine.exercises.length}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 40),
-        
-        // Only show "Next Exercise" if we are at the start of a new exercise (Transition Rest)
-        if (currentSetIndex == 0) ...[
-          Text(
-            '다음 운동: ${currentExercise.name}',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildCurrentSetCard(BuildContext context, ColorScheme colorScheme) {
+    return _ActiveSetCard(
+      exerciseType: currentExercise.type,
+      setNumber: currentSet.setNumber,
+      totalSets: currentSets.length,
+      targetReps: currentSet.targetReps,
+      targetWeight: currentSet.targetWeight,
+      onRepsChanged: (val) => currentSet.actualReps = val,
+      onWeightChanged: (val) => currentSet.actualWeight = val,
+    );
+  }
+
+  Widget _buildSetProgressIndicators(
+      BuildContext context, ColorScheme colorScheme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(currentSets.length, (index) {
+        final isCompleted = index < currentSetIndex ||
+            (index == currentSetIndex && currentSet.isCompleted);
+        final isCurrent = index == currentSetIndex && !currentSet.isCompleted;
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          width: isCurrent ? 48 : 40,
+          height: isCurrent ? 48 : 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isCompleted
+                ? colorScheme.primary
+                : isCurrent
+                    ? colorScheme.primary.withValues(alpha: 0.15)
+                    : colorScheme.onSurface.withValues(alpha: 0.08),
+            border: Border.all(
+              color: isCurrent
+                  ? colorScheme.primary
+                  : isCompleted
+                      ? colorScheme.primary
+                      : Colors.transparent,
+              width: 2,
+            ),
+            boxShadow: isCurrent
+                ? [
+                    BoxShadow(
+                      color: colorScheme.primary.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      spreadRadius: 2,
+                    ),
+                  ]
+                : null,
+          ),
+          child: Center(
+            child: isCompleted
+                ? const Icon(Icons.check_rounded, color: Colors.white, size: 20)
+                : Text(
+                    '${index + 1}',
+                    style: TextStyle(
+                      color: isCurrent
+                          ? colorScheme.primary
+                          : colorScheme.onSurface.withValues(alpha: 0.4),
+                      fontWeight: FontWeight.bold,
+                      fontSize: isCurrent ? 18 : 16,
+                    ),
+                  ),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _buildCompletedSets(BuildContext context, ColorScheme colorScheme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.check_circle_rounded,
+              size: 20,
               color: colorScheme.primary,
             ),
-          ),
-          const SizedBox(height: 8),
-        ],
-        
-        Text(
-          '${currentSet.setNumber} 세트 준비',
-          style: TextStyle(
-            fontSize: 18,
-            color: colorScheme.onSurface.withValues(alpha: 0.6),
-          ),
+            const SizedBox(width: 8),
+            const Text(
+              '완료된 세트',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
-        if (currentSetIndex < currentSets.length)
-          Text(
-            _getSetDescription(currentSet),
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+        const SizedBox(height: 12),
+        ...currentSets.take(currentSetIndex).map((set) => Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: _CompletedSetItem(set: set, type: currentExercise.type),
+            )),
       ],
+    );
+  }
+
+  Widget _buildRestView(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final progress = _restSecondsRemaining / currentExercise.defaultRestSeconds;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
+      child: Column(
+        children: [
+          // Rest Timer
+          Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: colorScheme.onSurface.withValues(alpha: 0.03),
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(
+                color: colorScheme.outline.withValues(alpha: 0.1),
+              ),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  '휴식 시간',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Animated Timer
+                AnimatedBuilder(
+                  animation: _pulseController,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _pulseAnimation.value,
+                      child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            // Background circle
+                            CircularProgressIndicator(
+                              value: 1,
+                              strokeWidth: 12,
+                              backgroundColor: Colors.transparent,
+                              color: colorScheme.onSurface.withValues(alpha: 0.08),
+                            ),
+                            // Progress circle
+                            TweenAnimationBuilder<double>(
+                              tween: Tween(begin: 1.0, end: progress),
+                              duration: const Duration(milliseconds: 300),
+                              builder: (context, value, child) {
+                                return CircularProgressIndicator(
+                                  value: value,
+                                  strokeWidth: 12,
+                                  backgroundColor: Colors.transparent,
+                                  color: colorScheme.primary,
+                                  strokeCap: StrokeCap.round,
+                                );
+                              },
+                            ),
+                            // Timer text
+                            Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '$_restSecondsRemaining',
+                                    style: TextStyle(
+                                      fontSize: 64,
+                                      fontWeight: FontWeight.w800,
+                                      color: colorScheme.primary,
+                                      height: 1,
+                                    ),
+                                  ),
+                                  Text(
+                                    '초',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: colorScheme.onSurface.withValues(alpha: 0.5),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 32),
+
+                // Next exercise preview
+                if (currentSetIndex == 0 && currentExerciseIndex > 0) ...[
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          colorScheme.primary.withValues(alpha: 0.1),
+                          colorScheme.primary.withValues(alpha: 0.05),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: DecorationImage(
+                              image: NetworkImage(currentExercise.imageUrl),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '다음 운동',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                currentExercise.name,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_rounded,
+                          color: colorScheme.primary,
+                        ),
+                      ],
+                    ),
+                  ),
+                ] else ...[
+                  // Next set info
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: colorScheme.onSurface.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '다음 세트 준비',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '${currentSet.setNumber} 세트',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _getSetDescription(currentSet),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -395,56 +986,73 @@ class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
   }
 
   Widget _buildBottomBar(BuildContext context) {
-    final appColors = Theme.of(context).extension<AppColorsExtension>();
     final colorScheme = Theme.of(context).colorScheme;
-    final baseStart = appColors?.freshMint ?? colorScheme.primary;
-    final baseEnd = appColors?.freshGreen ?? colorScheme.secondary;
-    final restStart = baseStart.withValues(alpha: 0.7);
-    final restEnd = baseEnd.withValues(alpha: 0.7);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            (isDark ? const Color(0xFF050508) : colorScheme.surface)
+                .withValues(alpha: 0.0),
+            isDark ? const Color(0xFF050508) : colorScheme.surface,
+          ],
+        ),
       ),
-      child: SafeArea(
-        child: SizedBox(
-          height: 56,
-          child: ElevatedButton(
-            onPressed: isResting ? _skipRest : _completeSet,
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              elevation: 0,
-            ),
-            child: Ink(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: isResting 
-                    ? [restStart, restEnd]
-                    : [baseStart, baseEnd],
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  isResting ? '휴식 건너뛰기' : '세트 완료',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Changed to white for better contrast on gradient
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            colors: isResting
+                ? [
+                    colorScheme.onSurface.withValues(alpha: 0.1),
+                    colorScheme.onSurface.withValues(alpha: 0.05),
+                  ]
+                : [
+                    colorScheme.primary,
+                    const Color(0xFF4ECDC4),
+                  ],
+          ),
+          boxShadow: isResting
+              ? null
+              : [
+                  BoxShadow(
+                    color: colorScheme.primary.withValues(alpha: 0.4),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
-                ),
+                ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: isResting ? _skipRest : _completeSet,
+            borderRadius: BorderRadius.circular(20),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    isResting
+                        ? Icons.skip_next_rounded
+                        : Icons.check_circle_rounded,
+                    color: isResting ? colorScheme.onSurface : Colors.white,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    isResting ? '휴식 건너뛰기' : '세트 완료',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isResting ? colorScheme.onSurface : Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -454,9 +1062,11 @@ class _CoachingProgressScreenState extends State<CoachingProgressScreen> {
   }
 }
 
+// Active Set Card Widget
 class _ActiveSetCard extends StatefulWidget {
   final ExerciseType exerciseType;
   final int setNumber;
+  final int totalSets;
   final int? targetReps;
   final double? targetWeight;
   final ValueChanged<int> onRepsChanged;
@@ -465,6 +1075,7 @@ class _ActiveSetCard extends StatefulWidget {
   const _ActiveSetCard({
     required this.exerciseType,
     required this.setNumber,
+    required this.totalSets,
     this.targetReps,
     this.targetWeight,
     required this.onRepsChanged,
@@ -498,6 +1109,7 @@ class _ActiveSetCardState extends State<_ActiveSetCard> {
   }
 
   void _updateReps(int delta) {
+    HapticFeedback.selectionClick();
     setState(() {
       reps = (reps + delta).clamp(0, 999);
       widget.onRepsChanged(reps);
@@ -505,6 +1117,7 @@ class _ActiveSetCardState extends State<_ActiveSetCard> {
   }
 
   void _updateWeight(double delta) {
+    HapticFeedback.selectionClick();
     setState(() {
       weight = (weight + delta).clamp(0, 999);
       widget.onWeightChanged(weight);
@@ -514,46 +1127,102 @@ class _ActiveSetCardState extends State<_ActiveSetCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(20),
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.03)
+            : Colors.white,
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: colorScheme.primary,
+          color: colorScheme.primary.withValues(alpha: 0.3),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.primary.withValues(alpha: 0.1),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: colorScheme.primary.withValues(alpha: 0.15),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
         children: [
-           Text(
-            '${widget.setNumber} 세트',
-            style: TextStyle(
-              fontSize: 18, 
-              fontWeight: FontWeight.bold,
-              color: colorScheme.primary,
+          // Header
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  colorScheme.primary.withValues(alpha: 0.15),
+                  colorScheme.primary.withValues(alpha: 0.05),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.play_circle_filled_rounded,
+                  color: colorScheme.primary,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${widget.setNumber} 세트',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
+                ),
+                Text(
+                  ' / ${widget.totalSets}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 20),
+
+          const SizedBox(height: 28),
+
+          // Controls
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (widget.exerciseType == ExerciseType.weight) ...[
-                _buildControl(context, '무게 (kg)', weight, (val) => _updateWeight(val)),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('X', style: TextStyle(fontSize: 20, color: Colors.grey)),
+                _buildControl(
+                  context,
+                  '무게',
+                  'kg',
+                  weight,
+                  (val) => _updateWeight(val),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    '×',
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: colorScheme.onSurface.withValues(alpha: 0.3),
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
                 ),
               ],
-              _buildControl(context, '횟수 (Rep)', reps.toDouble(), (val) => _updateReps(val.toInt())),
+              _buildControl(
+                context,
+                '횟수',
+                '회',
+                reps.toDouble(),
+                (val) => _updateReps(val.toInt()),
+              ),
             ],
           ),
         ],
@@ -561,65 +1230,99 @@ class _ActiveSetCardState extends State<_ActiveSetCard> {
     );
   }
 
-  Widget _buildControl(BuildContext context, String label, double value, ValueChanged<double> onChanged) {
+  Widget _buildControl(BuildContext context, String label, String unit,
+      double value, ValueChanged<double> onChanged) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isInt = value % 1 == 0;
+
     return Column(
       children: [
         Text(
           label,
           style: TextStyle(
-            fontSize: 14,
-            color: colorScheme.onSurface.withValues(alpha: 0.6),
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: colorScheme.onSurface.withValues(alpha: 0.5),
           ),
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            _CircularButton(icon: Icons.remove, onPressed: () => onChanged(-1)),
+            _buildControlButton(
+              context,
+              Icons.remove_rounded,
+              () => onChanged(-1),
+              isDark,
+            ),
             Container(
-              width: 70,
+              width: 80,
               alignment: Alignment.center,
-              child: Text(
-                isInt ? value.toInt().toString() : value.toString(),
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    isInt ? value.toInt().toString() : value.toString(),
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      height: 1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4, left: 2),
+                    child: Text(
+                      unit,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurface.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            _CircularButton(icon: Icons.add, onPressed: () => onChanged(1)),
+            _buildControlButton(
+              context,
+              Icons.add_rounded,
+              () => onChanged(1),
+              isDark,
+            ),
           ],
         ),
       ],
     );
   }
-}
 
-class _CircularButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  const _CircularButton({required this.icon, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildControlButton(
+      BuildContext context, IconData icon, VoidCallback onPressed, bool isDark) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return InkWell(
-      onTap: onPressed,
-      customBorder: const CircleBorder(),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.dark 
-            ? colorScheme.surfaceContainerHighest 
-            : colorScheme.surfaceContainerHigh,
+    return Material(
+      color: isDark
+          ? colorScheme.onSurface.withValues(alpha: 0.08)
+          : colorScheme.surfaceContainerHigh,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          child: Icon(
+            icon,
+            size: 24,
+            color: colorScheme.onSurface.withValues(alpha: 0.7),
+          ),
         ),
-        child: Icon(icon, size: 24),
       ),
     );
   }
 }
 
+// Completed Set Item
 class _CompletedSetItem extends StatelessWidget {
   final ExerciseSet set;
   final ExerciseType type;
@@ -630,41 +1333,87 @@ class _CompletedSetItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: isDark
-            ? colorScheme.surfaceContainerHighest
+            ? colorScheme.onSurface.withValues(alpha: 0.05)
             : colorScheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: colorScheme.primary.withValues(alpha: 0.1),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            '${set.setNumber} 세트',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    '${set.setNumber}',
+                    style: TextStyle(
+                      color: colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                '${set.setNumber} 세트',
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ],
           ),
           Row(
             children: [
               if (type == ExerciseType.weight) ...[
-                Text('${set.actualWeight}kg'),
-                const SizedBox(width: 8),
                 Text(
-                  '|',
+                  '${set.actualWeight}kg',
                   style: TextStyle(
-                    color: colorScheme.onSurface.withValues(alpha: 0.4),
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface.withValues(alpha: 0.8),
                   ),
                 ),
-                const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    '×',
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withValues(alpha: 0.3),
+                    ),
+                  ),
+                ),
               ],
-              Text('${set.actualReps}회'),
+              Text(
+                '${set.actualReps}회',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface.withValues(alpha: 0.8),
+                ),
+              ),
               const SizedBox(width: 12),
-              Icon(
-                Icons.check_circle,
-                color: colorScheme.primary,
-                size: 20,
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check_rounded,
+                  color: Colors.white,
+                  size: 14,
+                ),
               ),
             ],
           ),
@@ -672,4 +1421,353 @@ class _CompletedSetItem extends StatelessWidget {
       ),
     );
   }
+}
+
+// Workout Complete Dialog
+class _WorkoutCompleteDialog extends StatefulWidget {
+  final String routineName;
+  final int totalSets;
+  final VoidCallback onGetNft;
+  final VoidCallback onSkip;
+
+  const _WorkoutCompleteDialog({
+    required this.routineName,
+    required this.totalSets,
+    required this.onGetNft,
+    required this.onSkip,
+  });
+
+  @override
+  State<_WorkoutCompleteDialog> createState() => _WorkoutCompleteDialogState();
+}
+
+class _WorkoutCompleteDialogState extends State<_WorkoutCompleteDialog>
+    with TickerProviderStateMixin {
+  late AnimationController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Center(
+      child: Stack(
+        children: [
+          // Confetti
+          AnimatedBuilder(
+            animation: _confettiController,
+            builder: (context, child) {
+              return CustomPaint(
+                size: MediaQuery.of(context).size,
+                painter: _DialogConfettiPainter(
+                  progress: _confettiController.value,
+                ),
+              );
+            },
+          ),
+
+          // Dialog
+          Container(
+            margin: const EdgeInsets.all(32),
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1A1A2E) : Colors.white,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 40,
+                  offset: const Offset(0, 20),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Trophy icon with glow
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        colorScheme.primary,
+                        const Color(0xFF4ECDC4),
+                      ],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.primary.withValues(alpha: 0.5),
+                        blurRadius: 30,
+                        spreadRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.emoji_events_rounded,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                Text(
+                  '운동 완료!',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w800,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  widget.routineName,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Stats
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: colorScheme.onSurface.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildStat(
+                        context,
+                        Icons.fitness_center_rounded,
+                        '${widget.totalSets}',
+                        '세트 완료',
+                      ),
+                      Container(
+                        width: 1,
+                        height: 40,
+                        color: colorScheme.onSurface.withValues(alpha: 0.1),
+                      ),
+                      _buildStat(
+                        context,
+                        Icons.local_fire_department_rounded,
+                        '100',
+                        '칼로리',
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                Text(
+                  '축하합니다! NFT 리워드를 받을 수 있어요',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
+                    height: 1.5,
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // NFT Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: [
+                          colorScheme.primary,
+                          const Color(0xFF4ECDC4),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorScheme.primary.withValues(alpha: 0.4),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: widget.onGetNft,
+                        borderRadius: BorderRadius.circular(16),
+                        child: const Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.auto_awesome_rounded,
+                                color: Colors.white,
+                                size: 22,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'NFT 받기',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                TextButton(
+                  onPressed: widget.onSkip,
+                  child: Text(
+                    '나중에 받기',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStat(
+      BuildContext context, IconData icon, String value, String label) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      children: [
+        Icon(
+          icon,
+          color: colorScheme.primary,
+          size: 24,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: colorScheme.onSurface.withValues(alpha: 0.5),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Confetti Painter for Dialog
+class _DialogConfettiPainter extends CustomPainter {
+  final double progress;
+
+  _DialogConfettiPainter({required this.progress});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final random = math.Random(42);
+    final colors = [
+      const Color(0xFF13ECA4),
+      const Color(0xFFFFD700),
+      const Color(0xFF4E80EE),
+      const Color(0xFFA855F7),
+      const Color(0xFF4ECDC4),
+      const Color(0xFFFF6B6B),
+    ];
+
+    for (int i = 0; i < 60; i++) {
+      final x = random.nextDouble() * size.width;
+      final delay = random.nextDouble() * 0.3;
+      final adjustedProgress = ((progress - delay) / (1 - delay)).clamp(0.0, 1.0);
+
+      if (adjustedProgress <= 0) continue;
+
+      final startY = size.height * 0.3;
+      final endY = size.height + 50;
+      final y = startY + (endY - startY) * adjustedProgress;
+
+      final drift = math.sin(adjustedProgress * math.pi * 3 + i) * 20;
+
+      final color = colors[i % colors.length];
+      final opacity = (1.0 - adjustedProgress * 0.7).clamp(0.0, 1.0);
+      final paint = Paint()
+        ..color = color.withValues(alpha: opacity)
+        ..style = PaintingStyle.fill;
+
+      final confettiSize = 4.0 + random.nextDouble() * 6;
+      final rotation = adjustedProgress * math.pi * 4 * (random.nextBool() ? 1 : -1);
+
+      canvas.save();
+      canvas.translate(x + drift, y);
+      canvas.rotate(rotation);
+
+      if (i % 3 == 0) {
+        canvas.drawCircle(Offset.zero, confettiSize / 2, paint);
+      } else if (i % 3 == 1) {
+        canvas.drawRect(
+          Rect.fromCenter(
+            center: Offset.zero,
+            width: confettiSize,
+            height: confettiSize * 0.5,
+          ),
+          paint,
+        );
+      } else {
+        final path = Path()
+          ..moveTo(0, -confettiSize / 2)
+          ..lineTo(confettiSize / 2, confettiSize / 2)
+          ..lineTo(-confettiSize / 2, confettiSize / 2)
+          ..close();
+        canvas.drawPath(path, paint);
+      }
+
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

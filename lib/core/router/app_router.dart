@@ -19,6 +19,7 @@ import 'package:team_wellness/presentation/screens/profile/activity_detail_scree
 import 'package:team_wellness/presentation/screens/profile/my_page_screen.dart';
 import 'package:team_wellness/presentation/screens/splash/splash_screen.dart';
 import 'package:team_wellness/presentation/screens/wallet/reward_wallet_screen.dart';
+import 'package:team_wellness/presentation/screens/wallet/nft_minting_screen.dart';
 import 'package:team_wellness/presentation/screens/analysis/sbt_analysis_screen.dart';
 import 'package:team_wellness/presentation/screens/trainer/trainer_education_screen.dart';
 import 'package:team_wellness/presentation/screens/trainer/trainer_certification_screen.dart';
@@ -201,6 +202,18 @@ class AppRouter {
         path: '/trainer/performance',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const TrainerPerformanceScreen(),
+      ),
+      // --- NFT Minting ---
+      GoRoute(
+        path: '/wallet/minting',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, String>? ?? {};
+          return NftMintingScreen(
+            achievementType: extra['type'] ?? 'goal',
+            achievementName: extra['name'] ?? '목표 달성',
+          );
+        },
       ),
     ],
   );
